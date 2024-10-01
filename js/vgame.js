@@ -52,6 +52,7 @@ class Game {
         this.timer = 0;
         this.timerInterval = null;
         this.time_of_last_cube_pick = 0;
+        this.pickCount = 0;
         // TODO: Implement Event listeners for the cubes
         this.CardPickedEventListeners = [];
         this.GameOverEventListeners = [];
@@ -59,12 +60,23 @@ class Game {
         this.ShowQuizEventListeners = [];
         this.MatchFoundEventListeners = [];
         this.NoMatchFoundListeners = [];
+        this.UpdateScoreEventListeners = [];
+        // Event for the first card of a pair being picked
+        this.FirstCardPickedEventListeners = [];
+        // Event for the very first card picked in the game
+        this.VeryFirstCardPickedEventListeners = [];
     }
 
     addEventListener = (event, callback) => {
         switch (event) {
             case "card-picked":
                 this.CardPickedEventListeners.push(callback);
+                break;
+            case "first-card-picked":
+                this.FirstCardPickedEventListeners.push(callback);
+                break;
+                case "very-first-card-picked":
+                this.VeryFirstCardPickedEventListeners.push(callback);
                 break;
             case "match-found":
                 this.MatchFoundEventListeners.push(callback);
@@ -80,6 +92,9 @@ class Game {
                 break;
             case "show-quiz":
                 this.ShowQuizEventListeners.push(callback);
+                break;
+            case "update-score":
+                this.UpdateScoreEventListeners.push(callback);
                 break;
         }
     }
@@ -97,14 +112,27 @@ class Game {
     }
 
     cubePicked = (n) => {
-        this.time_of_last_cube_pick = Date.now();
+        if (this.isSameCard(n)) {
+            return false;
+        }
+        // If pick count is 0, it means it is the very first card picked in the game
+        if (this.pickCount === 0) {
+            this.firstCube = this.cubes[n];
+            this.time_of_last_cube_pick = Date.now();
+            this.pickCount++;
+            this.VeryFirstCardPickedEventListeners.forEach(callback => callback(n));
+            return;
+        }
         // Card picked event
         this.CardPickedEventListeners.forEach(callback => callback(n));
         // Play the song associated with the Cube    
         this.mp3player.play(this.cubes[n].trackIndex);
         // If the first Cube is null, it means that this is the first Cube to be selected
-        if (this.firstCube == null) {
+        if (this.firstCube == null && this.pickCount !== 0) {
             this.firstCube = this.cubes[n];
+            this.time_of_last_cube_pick = Date.now();
+            // First card picked event
+            this.FirstCardPickedEventListeners.forEach(callback => callback(n));
         }// If the second Cube is null, it means that this is the second Cube to be selected
         else if (this.secondCube == null) {
             this.secondCube = this.cubes[n];
@@ -113,6 +141,7 @@ class Game {
             // and the Cube that was just selected becomes the second Cube
             this.firstCube = this.secondCube;
             this.secondCube = this.cubes[n];
+            this.time_of_last_cube_pick = Date.now();
         }
         // Check if the two cubes are a match
         // If they are, the score is incremented and the cubes_uncovered counter is incremented by 2        
@@ -131,8 +160,11 @@ class Game {
             this.firstCube = null;
             this.secondCube = null;
             this.score++;
-            calculateExtraScore(this);
+            this.calculateExtraScore();
             this.cubes_uncovered += 2;
+
+            // Update score event
+            this.UpdateScoreEventListeners.forEach(callback => callback());
 
             // Show quiz event
             this.ShowQuizEventListeners.forEach(callback => callback());
@@ -144,29 +176,42 @@ class Game {
                 this.onGameOver(this);
             }
             // Match found event
-            this.MatchFoundEventListeners.forEach(callback => callback());
+            this.MatchFoundEventListeners.forEach(callback => callback(n));
             // Set the time of the last card pick to the current time (for calculating the extra score)
             this.time_of_last_cube_pick = Date.now();
             return true;
-        }
+        }   
+        // Reset the first and second cubes to indicate that this was the first card in a pair
+        this.firstCube = this.cubes[n];
+        this.secondCube = null;
         // No match found event
         this.NoMatchFoundListeners.forEach(callback => callback(n));
         return false;
-
-        function calculateExtraScore(instance) {
-            /* The less time the players take to find a match, the more they score */
-            let extra_score = 0;
-            // Calculate the time difference between the last two card picks
-            let time_difference = Date.now() - instance.time_of_last_cube_pick;
-            // Convert the time difference to seconds
-            let time_difference_seconds = time_difference / 1000;
-            // Calculate the extra score based on the time difference
-            extra_score = Math.floor(50 / time_difference_seconds);
-            // Add the extra score to the game score
-            instance.addScore(extra_score);
-        }
+    }
+    // See if the same card has been picked twice
+    isSameCard = (n) => {
+        console.log("isSameCard");
+        console.log("first-cube:" +this.firstCube?.index);
+        console.log("n: "+ n);
+        if(this.firstCube == null) return false;
+        return this.firstCube.index === n;
     }
 
+    calculateExtraScore = () => {
+        console.log("calculateExtraScore current score: " + this.score);
+
+        /* The less time the players take to find a match, the more they score */
+        let extra_score = 0;
+        // Calculate the time difference between the last two card picks
+        let time_difference = Date.now() - this.time_of_last_cube_pick;
+        // Convert the time difference to seconds
+        let time_difference_seconds = time_difference / 1000;
+        // Calculate the extra score based on the time difference
+        extra_score = Math.floor(50 / time_difference_seconds);
+        console.log("Extra score: " + extra_score);
+        // Add the extra score to the game score
+        this.score += extra_score;
+    }
     isGameOver = () => {
         return this.cubes_uncovered === this.cubes.length;
     }
@@ -228,8 +273,12 @@ class GameView {
         this.quiz.hideQuizContainer();
         this.hideGameOverScreen();
         this.game.addEventListener("game-over", this.showGameOverScreen);
-        this.game.addEventListener("hide-quiz", this.quiz.hideQuizContainer);        
+        this.game.addEventListener("hide-quiz", this.quiz.hideQuizContainer);
+        this.game.addEventListener("match-found", this.matchFound);
         this.game.addEventListener("no-match-found", this.noMatchFound);
+        this.game.addEventListener("update-score", this.updateScoreDisplay);
+        this.game.addEventListener("first-card-picked", this.firstCardPicked);
+        this.game.addEventListener("very-first-card-picked", this.veryFirstCardPicked);
     }
 
     // Fisher Yates shuffle algorithm
@@ -342,27 +391,45 @@ class GameView {
 
     cubeClicked = (n) => {
         this.quiz.showQuizPlaceholder();
-        // Flip the cube over
-        this.flipCubeOver(n);
         // Forward the information to the game logic
         this.game.cubePicked(n);
     }
-
-    noMatchFound = (n) => {        
-        this.flipCubeBack(this.previous_cube);        
+    // The very first card in the game has been picked
+    veryFirstCardPicked = (n) => {
+        // Flip the cube over
+        this.flipCubeOver(n);
         this.previous_cube = n;
-        // this.flip_previous_cube = false;
+        this.flip_previous_cube = false;
+        console.log("Very first card picked");
+    }
+    // The first card of a pair has been picked
+    firstCardPicked = (n) => {
+        // Flip the cube over
+        this.flipCubeOver(n);
+        // this.flipCubeBack(this.previous_cube);
+        this.previous_cube = n;
+        this.flip_previous_cube = false
+        console.log("First card picked");
+    }
+
+    noMatchFound = (n) => {
+        this.flipCubeBack(this.previous_cube);
+        this.flipCubeOver(n);
+        this.previous_cube = n;
+        this.flip_previous_cube = false;
+        console.log("No match found");
     }
 
     // If a match has been found, the game logic will call this method
-    matchFound = () => {
+    matchFound = (n) => {
         this.uncovered_cubes.push(this.previous_cube);
-        this.uncovered_cubes.push(this.previous_cube);
-        this.flipCubeBack(n);
+        this.uncovered_cubes.push(n);
+        this.showCubesBottom(n);
         this.showCubesBottom(this.previous_cube);
         this.previous_cube = null;
         this.flip_previous_cube = false;
-        this.updateScoreDisplay();
+        // this.updateScoreDisplay();
+        console.log("Match found");
     }
 
     _cubeClicked = (n) => {
@@ -432,22 +499,24 @@ class GameView {
         const scoreDisplay = document.getElementById("score");
         scoreDisplay.textContent = 0;
 
-        // clear the covered cards array
+        // clear the covered cubes array
         this.uncovered_subes = [];
         this.previous_sube = null;
         this.removeCubesFromDOM();
-        this.cubes = [];
-        // Reinitialize the game cards
-        // const newGameCards = [];
-        // generateGameCards(newGameCards);
-        // embedGameCards(cardsContainer, newGameCards);
+        this.cubes = [];        
         this.generateGameCubes();
         this.game = new Game(this.cubes, this.audio_player, this.showGameOverScreen);
         this.quiz = new Quiz(this.game, this);
         this.render();
         this.quiz.hideQuizContainer();
-        this.hideGameOverScreen();
-        this.game.addHideQuizCallback(this.quiz.hideQuizContainer);
+        this.hideGameOverScreen();        
+        this.game.addEventListener("game-over", this.showGameOverScreen);
+        this.game.addEventListener("hide-quiz", this.quiz.hideQuizContainer);
+        this.game.addEventListener("match-found", this.matchFound);
+        this.game.addEventListener("no-match-found", this.noMatchFound);
+        this.game.addEventListener("update-score", this.updateScoreDisplay);
+        this.game.addEventListener("first-card-picked", this.firstCardPicked);
+        this.game.addEventListener("very-first-card-picked", this.veryFirstCardPicked);
     }
 
     removeCubesFromDOM = () => {

@@ -52,7 +52,9 @@ class Quiz {
     }
 
     guess = (answer) => {        ;
+        console.log("Quiz.guess: game.score:"+this.game.score);
         if (answer === this.currentAnswer) {
+            
             this.game.addScore(30);
             this.gameView.updateScoreDisplay();
             this.showSuccessMessage();
