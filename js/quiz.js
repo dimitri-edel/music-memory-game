@@ -8,6 +8,8 @@ class Quiz {
         this.currentAnswer = "";
         this.currentOptions = [];
         this.htmlContainer = document.getElementById("quiz-container");
+        this.game.addEventListener("hide-quiz", this.hideQuizContainer);
+        this.game.addEventListener("show-quiz", this.showQuiz);
     }
 
     shuffle(array) {
@@ -15,6 +17,11 @@ class Quiz {
             let j = Math.floor(Math.random() * i);
             [array[i], array[j]] = [array[j], array[i]];
         }
+    }
+
+    showQuiz = () => {
+        this.generateNextQuestion();
+        this.renderQuestion();        
     }
 
     generateNextQuestion = () => {
@@ -94,6 +101,8 @@ class Quiz {
     }
 
 }
+
+
 
 // Array of questions with answers:
 const triviaQuestions = [
@@ -743,4 +752,3 @@ const triviaQuestions = [
         options: ["Slow", "Fast", "Moderate", "Variable"],
     },
 ];
-

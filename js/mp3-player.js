@@ -22,13 +22,13 @@ class MP3Player {
                 this.stop();
             }
             // 
-            this.audio = new Audio(this.audio_files_foler_path + this.tracks[n] + ".mp3");
+            this.audio = new Audio(this.audio_files_foler_path + this.tracks[n].filename + ".mp3");
             this.audio.volume = this.volume;
             this.audio.play();
         } else {
             // if the audio has been stoppped, load the audio file and play it
             if (this.audio == null) {
-                this.audio = new Audio(this.audio_files_foler_path + this.tracks[this.trackIndex] + ".mp3");
+                this.audio = new Audio(this.audio_files_foler_path + this.tracks[this.trackIndex].filename + ".mp3");
                 this.audio.volume = this.volume;
                 this.audio.play();
             } else {
@@ -58,7 +58,7 @@ class MP3Player {
     next = () => {
         if (this.audio != null) this.stop();
         this.trackIndex = this.trackIndex < this.tracks.length - 1 ? this.trackIndex + 1 : 0;
-        this.audio = new Audio(this.audio_files_foler_path + this.tracks[this.trackIndex] + ".mp3");
+        this.audio = new Audio(this.audio_files_foler_path + this.tracks[this.trackIndex].filename + ".mp3");
         this.audio.volume = this.volume;
         this.play(null);
     }
