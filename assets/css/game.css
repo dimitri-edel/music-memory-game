@@ -1,0 +1,449 @@
+.main-container {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.game-header-container {
+  text-align: center;
+  padding: 10px;
+}
+
+.second-heading {
+  font-size: 25px;
+}
+
+.score-timer-container {
+  display: flex;
+  justify-content:space-around; 
+  margin-top: 10px; 
+}
+
+.score, .timer {
+  margin: 0 5px; 
+  font-size: 25px; 
+  font-weight: bold;
+  padding: 10px;
+  border: 2px solid black;      
+  border-radius: 10px;          
+  display: inline-block;
+  width: 120px; 
+  text-align: center;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 10px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.button-container {
+  display: flex;
+  align-items: center; 
+  width: 100%;
+  margin-top: 20px;
+  grid-gap: 20px;
+  flex-direction: row;
+}
+
+.button-container input {
+  margin: 5px; 
+}
+
+/* Restart-Instructions Buttons */
+.restart-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px; 
+  grid-gap: 20px;
+  width: 100%;
+  justify-content:center;
+  margin-top: 40px;
+  flex-direction: row;
+}
+
+.restart-container div {
+  margin: -5px 10px;
+  align-items: center;
+}
+
+.flip-card-inner {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.instructions-button, .restart-button {
+  background-color: #f08080; 
+  border: none;
+  color: white;
+  padding: 15px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  justify-content: space-between;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px; 
+  width: 200px;
+}
+
+.instructions-button:hover, .restart-button:hover {
+  box-shadow: 3px 3px 3px rgba(0, 77, 64, 0.8);
+  transform: scale(1.3);
+}
+
+/* Player Buttons */
+#play {
+  color: black;
+  background-color: #004d40;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px; 
+  width: 100%;
+}
+
+#play:hover {
+  background-color:rgba(0, 77, 64, 0.5);
+  transform: scale(1.1);
+}
+
+#pause {
+  color: black;
+  background-color: #d0b8a8;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  width: 100%;
+
+}
+
+#pause:hover {
+  background-color:rgba(208, 184, 168, 0.5);
+  transform: scale(1.1);
+}
+
+#stop {
+  color: black;
+  background-color: #f08080;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  width: 100%;
+  margin-right: 20px;
+
+}
+
+#stop:hover {
+  background-color:rgba(240, 128, 128, 0.5);
+  transform: scale(1.1);
+}
+
+#next {
+  color: black;
+  background-color: #004d40;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  width: 100%;
+
+}
+
+#test-button {
+  color: black;
+  background-color: #004d40;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  width: 100%;
+
+}
+
+/* Game Over Popup Styling */
+#game-over-screen {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f7e7ce;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(145, 2, 0, 0.562), 0 4px 6px rgba(145, 2, 0, 0.562);
+  z-index: 100;
+  max-width: 100%;
+  width: 600px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.game-over-heading h1 {
+  font-size: 40px;
+  font-weight: bold;
+  color: #e74c3c;
+  margin-bottom: 20px;
+}
+
+.player-name {
+  font-size: 24px;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 20px;
+}
+
+.game-over-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.go-score-timer-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.go-score, .go-timer {
+  font-size: 20px;
+  color: #555555;
+  width: 45%;
+}
+
+#final-score, #final-timer {
+  font-weight: bold;
+  color: #000000;
+}
+
+.game-over-message {
+  font-size: 18px;
+  color: #666666;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.game-over-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+}
+
+.play-again, .scoreboard-button {
+  background-color: #f08080;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 45%;
+}
+
+.play-again:hover {
+  background-color: #ed6060;
+}
+
+.scoreboard-button {
+  background-color: #004d40;
+}
+
+.scoreboard-button:hover {
+  background-color: #012a23;
+}
+
+.trivia-container {
+  background-color: #f7e7ce;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(145, 2, 0, 0.562), 0 4px 6px rgba(145, 2, 0, 0.562);
+  width: 70%;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.trivia-entire-line {
+  display: flex;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  height: 50%;
+  margin: 15px 0;
+  color: #ed6060;
+}
+
+.trivia-option-line {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  height: auto;
+  font-size: 20px;
+  color: #004d40;
+  margin-bottom: 20px;
+}
+
+.trivia-option {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 2px solid #004d40;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.trivia-option:checked {
+  background-color: #013930;
+}
+
+.trivia-option {
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+
+
+.trivia-message-success {
+  color: #004d40;
+  background-color: #a3d0a260;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 145, 82, 0.562), 0 4px 6px rgba(0, 145, 63, 0.562);
+  font-size: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  height: 80px;
+  width: 70%;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.trivia-message-fail {
+  color: #e74c3c;
+  background-color: #e071712d;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(145, 2, 0, 0.562), 0 4px 6px rgba(145, 2, 0, 0.562);
+  width: 60%;
+  align-items: center;
+  font-size: 20px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  height: 80px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) { 
+  .grid-container {
+      grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .score, .timer {
+      font-size: 20px;
+  }
+
+  .instructions-button, .restart-button {
+      font-size: 14px;
+  }
+
+  .restart-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 400px) {
+  .score, .timer {
+      font-size: 18px;
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .flip-card {
+      max-width: 100px;
+      max-height: 100px;
+  }
+}
+
+@media (max-width: 500px) {
+  #game-over-screen {
+      width: 90%;
+      padding: 20px;
+  }
+
+  .go-score-timer-container {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .go-score, .go-timer {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 10px;
+  }
+
+  .game-over-buttons {
+      flex-direction: column;
+      width: 100%;
+      gap: 10px;
+  }
+
+  .play-again, .scoreboard-button {
+      width: 100%;
+  }
+}

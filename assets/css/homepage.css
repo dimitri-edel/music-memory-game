@@ -1,0 +1,162 @@
+/* Main content styling */
+.main-content {
+    text-align: center;
+    padding: 20px;
+    margin-top: 80px;
+}
+
+.game-card {
+    background-color: #fff;
+    box-shadow: 0 10px 25px rgba(145, 2, 0, 0.562), 0 4px 6px rgba(145, 2, 0, 0.562);
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.game-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.game-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    color: #2e2e2e;
+    margin-bottom: 10px;
+}
+
+.description {
+    font-size: 22px;
+    margin-bottom: 20px;
+    font-family: 'Crimson Pro', serif;
+    color: #2e2e2e;
+}
+
+.input-field {
+    padding: 10px;
+    font-size: 18px;
+    border: 2px solid #004d40;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: #d0b8a8;
+    color: #2e2e2e;
+    display: block;
+}
+
+.instructions-button {
+    margin-bottom: 25px;
+    background-color: #038d76;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Cormorant Garamond', serif;
+    margin-top: 10px;
+    display: block;
+    transition: box-shadow 0.3s;
+}
+
+.start-button {
+    background-color: #004d40;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Cormorant Garamond', serif;
+    margin-top: 10px;
+    display: block;
+    transition: box-shadow 0.3s;
+}
+
+.start-button:hover {
+    box-shadow: 0 0 10px #f08080, 0 0 20px #f08080;
+}
+
+.instructions-button:hover {
+    box-shadow: 0 0 10px #388e3c, 0 0 20px #388e3c;
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modal h2 {
+    margin-bottom: 20px;
+}
+
+.modal-start-button {
+    background-color: #004d40;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.modal-start-button:hover {
+    background-color: #003d33;
+}
+
+.close-button {
+    color: #171616;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.confetti {
+    position: absolute;
+    opacity: 1;
+    transition: opacity 1s, transform 1s;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .input-field {
+        width: 250px;
+    }
+
+    .start-button {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+}

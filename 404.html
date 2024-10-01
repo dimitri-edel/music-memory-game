@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title -->
+    <title>404 Not Found</title>
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/404.css">
+</head>
+
+<!-- Main Body-->
+
+<body>
+    <!-- Main Content -->
+    <section class="error-container">
+        <h1>404: Score Not Found</h1>
+        <div class="error-paragraph">
+            <p>Uh-oh! It seems you've hit a sour note and wandered off the sheet music. This page is as hard to find as
+                a misplaced crescendo in a Beethoven symphony.</p>
+            <p>Don’t worry, even the greatest maestros occasionally lose their rhythm. Let’s get you back in tune with
+                the game!</p>
+            
+                <a href="index.html" aria-label="Link to game home page">Return to the Concert</a>
+            <p id="feedback">If the game has lost its harmony, we'd love to hear your feedback!</p>
+            
+            <a href="feedbackform.html" aria-label="Link to feedback form">Tell us what went off-key!</a>
+            
+            <p id="ty" class="time">Thank You for Playing!</p>
+
+        </div>
+
+        <div class="error-card">
+            <div class="card-container">
+                <div class="card" title="Click for sound">
+                    <p>4</p>
+                    <img src="assets/images/f-note-four-trnsp.webp" alt="Number Four">
+                </div>
+                <div class="card" title="Click for sound">
+                    <p>0</p>
+                    <img src="assets/images/c-note-zero-trnsp.webp" alt="Number Zero">
+                </div>
+                <div class="card" title="Click for sound">
+                    <p>4</p>
+                    <img src="assets/images/f-note-four-trnsp.webp" alt="Number Four">
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!-- Audio files -->
+    <audio id="sound-4" src="assets/audio/f-note-treble-clef.mp3"></audio>
+    <audio id="sound-0" src="assets/audio/c-music-note-treble-clef.mp3"></audio>
+    <audio id="sound-4b" src="assets/audio/f-note-treble-clef.mp3"></audio>
+
+    <!-- External JavaScript file -->
+    <script src="js/404-card-sounds.js"></script>
+</body>
+
+</html>

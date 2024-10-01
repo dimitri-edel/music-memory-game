@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+
+/* Basic reset for consistent styling across browsers */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Local font and color variables */
+:root {
+    /* Color Variables */
+    --color-green: #004d40;
+    --color-lightgold: #F7E7CE;
+    --color-beige: #d0b8a8;
+    --color-darkgrey: #2e2e2e;
+    --color-salmon: #f08080;
+    --color-white: #f5f5f5;
+
+    /* Font Variables */
+    --font-body: 'Crimson Pro', serif;
+    --font-heading: 'Cormorant Garamond', serif;
+}
+
+/* Universal styles */
+body {
+    background-color: var(--color-lightgold);
+    font-family: var(--font-body), serif;
+    color: var(--color-green);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: radial-gradient(circle, #F7E7CE 40%, #f08080 100%);
+}
+
+/* Heading styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading), serif;
+}
+
+/* Error container */
+.error-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 140px);
+    padding: 20px;
+    margin-top: 50px;
+
+}
+
+/* Error paragraph */
+.error-paragraph {
+    text-align: center;
+    color: var(--color-green);
+    padding: 25px 0px 0;
+    font-size: 1.1rem;
+
+}
+
+.error-paragraph p#feedback,
+.error-paragraph p#ty {
+    padding: 30px 0 0;
+}
+
+/* Error card section */
+.error-card {
+    margin-top: 50px;
+}
+
+.error-card h1 {
+    margin-bottom: 20px;
+    color: var(--color-green);
+    font-size: 3rem;
+}
+
+/* Card container */
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+/* Individual card styles */
+.card {
+    background-color: var(--color-salmon);
+    border-radius: 20px;
+    border: #f08080 1px;
+    width: 80px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(145, 2, 0, 0.562), 0 4px 6px rgba(145, 2, 0, 0.562);
+    transition: transform 0.3s ease;
+}
+
+.card img {
+    width: 40px;
+    height: 40px;
+    margin-top: 20px;
+}
+
+.card p {
+    font-size: 2.5rem;
+    color: var(--color-green);
+}
+
+/* Hover effect for cards */
+.card:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+/* Responsive Design for larger screens */
+@media (min-width: 600px) {
+    .error-container {
+        font-size: 2.5rem;
+    }
+
+    .card-container {
+        gap: 20px;
+    }
+
+    .card {
+        width: 200px;
+        height: 250px;
+    }
+
+    .card img {
+        width: 100px;
+        height: 100px;
+        margin-top: 30px;
+    }
+
+    .card p {
+        font-size: 4.5rem;
+    }
+}

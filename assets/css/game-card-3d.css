@@ -1,0 +1,119 @@
+/* div container for a set of 3d-cubes */
+
+.cubes-container {
+    display: grid;
+    width: 700px;
+    grid-template-columns: repeat(4, minmax(110px, 1fr));
+    grid-gap: 1rem;
+    padding: 0rem;
+    margin: auto;
+    justify-items: center;
+    perspective: 500px2000px;
+}
+
+.cube {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+    transform-style: preserve-3d;
+    transform: rotateX(0deg) rotateY(0deg);
+    transition: transform 0.5s;
+}
+
+.cube img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.cube-front {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-color: #f1f1f1;
+    text-align: center;
+    line-height: 150px;
+    font-size: 24px;
+    color: #333;
+    transform: rotateX(0deg) translateZ(75px);
+}
+
+.cube-right {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-color: #051801;
+    transform: rotateY(90deg) translateZ(75px);
+
+}
+
+.cube-back {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-color: #051801;
+    transform: rotateX(-180deg) translateZ(75px);
+}
+
+.cube-left {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-color: #051801;
+    transform: rotateY(-90deg) translateZ(75px);
+}
+
+.cube-top {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-color: #f1f1f1;
+    transform: rotateX(90deg) translateZ(75px);
+    text-align: center;
+    line-height: 150px;
+    font-size: 24px;
+    color: #333;
+}
+
+.cube-bottom {
+    z-index: 2;
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    transform: rotateX(-90deg) translateZ(75px);
+    text-align: center;
+    background-color: #f1f1f1;
+}
+
+
+.cube-bottom img {
+    width: auto;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 10px;
+    opacity: 0.8;
+
+}
+
+
+.cube-rotate-left {
+    transform: rotateY(-90deg);
+}
+
+.cube-rotate-right {
+    transform: rotateY(90deg);
+}
+
+.cube-rotate-up {
+    transform: rotateX(-90deg) translateZ(30px);
+}
+
+.cube-rotate-to-front {
+    transform: rotateX(0deg) rotateY(0deg);
+}
+
+.cube-rotate-down {
+    transform: rotateX(90deg) translateZ(-30px);
+}

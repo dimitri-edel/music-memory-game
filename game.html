@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <!-- Stylesheet -->
+
+    <!-- jQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="./assets/css/game.css">
+    <link rel="stylesheet" href="./assets/css/game-cards.css">
+    <link rel="stylesheet" href="./assets/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/instructions.css">
+    <title>Game Page</title>
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+    <div class="container">
+        <div class="main-container"></div>
+        <div class="game-header-container">
+            <h1>Music Non Stop</h1>
+            <h1 class="second-heading">Classical Composers Await: Can You Make the Match?</h1>
+            <div class="score-timer-container">
+                <div class="score">Score: <span id="score">0</span></div>
+                <div class="timer"><span id="timer">0:00</span></div>
+            </div>
+        </div>
+
+        <div id="trivia-container" class="trivia-container"></div>
+        <div id="trivia-message" class="trivia-message-success">Here you will see a BONUS question to score some EXTRA points !</div>
+
+        <div class="grid-container" id="cards-container">
+            <!-- The cards will be injected here -->
+        </div>
+
+        <div id="game-over-screen" class="game-over-popup">
+            <div class="game-over-heading">
+                <h1>Game Over</h1>
+            </div>
+            <h2 id="player-name" class="player-name"></h2>
+            <div class="game-over-content">
+                <div class="go-score-timer-container">
+                    <h2 class="go-score">Score: <span id="final-score"></span></h2>
+                    <h2 class="go-timer">Time: <span id="final-timer"></span></h2>
+                </div>
+                <p id="game-over-message" class="game-over-message"></p>
+                <div class="game-over-buttons">
+                    <button class="play-again" id="play-again" onclick="gameRestart()">Play Again</button>
+                    <button class="scoreboard-button" id="scoreboard"
+                        onclick="on_scoreboard_button_click()">Scoreboard</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <span id="track-index"></span>
+            <button id="play" onclick="player.play(null)">
+                <i class="fas fa-play"></i>
+            </button>
+            <button id="pause" onclick="player.pause()">
+                <i class="fas fa-pause"></i>
+            </button>
+            <button id="stop" onclick="player.stop()">
+                <i class="fas fa-stop"></i>
+            </button>
+        </div>
+
+        <div class="restart-container">
+            <div>
+                <input type="button" class="restart-button" value="Try Again" id="restart-game" onclick="gameRestart()">
+            </div>
+            <div>
+                <input type="button" class="instructions-button" value="Instructions" id="show-instructions">
+            </div>
+        </div>
+        <!-- Hidden Instructions Popup -->
+        <div id="instructions-popup">
+            <h1>Instructions</h1>
+            <h2>Objective:</h2>
+            <p>Match all 12 pairs of cards that play the same tune.</p>
+            <h2>How to Play:</h2>
+            <ul>
+                <li>The game will start the timer as soon as you begin.</li>
+                <li>Click on any two cards to flip them over and listen to the tunes.</li>
+                <li>If the cards play the same tune, you have found a match. The cards will remain face up.</li>
+                <li>If the cards do not match, they will flip back over after a short delay.</li>
+                <li>For each successful match, a bonus trivia question will pop up with multiple answer options. You can choose to answer the question for bonus points, or skip it and continue with the memory card game.</li>
+                <li>Keep selecting two cards at a time, trying to remember the tunes and their locations.</li>
+                <li>The game ends when all pairs have been matched.</li>
+            </ul>
+            <h2>Winning the Game:</h2>
+            <p>The goal is to match all pairs as quickly as possible. Your final time will be displayed when the last
+                pair is matched.</p>
+            <h3>Bonus Points:
+                <p>The more correct trivia answers you provide, the higher your overall score.</p>
+            </h3>
+            <button class="close-btn" id="close-instructions">Close</button>
+        </div>
+
+        <div id="overlay"></div>
+    </div>
+    <div id="footer-placeholder"></div>
+
+    <script src="js/loadLayout.js"></script>
+    <script src="./js/mp3-player.js"></script>
+    <script src="js/playerData.js"></script>
+    <script src="./js/game.js"></script>
+    <script src="./js/navigation.js"></script>
+    <script src="./js/trivia.js"></script>
+    <script src="./js/main.js"></script>
+    <script src="./js/timer.js"></script>
+    <script src="./js/instructions.js"></script>
+</body>
+
+</html>

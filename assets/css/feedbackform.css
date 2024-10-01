@@ -1,0 +1,145 @@
+/* Basic reset for consistent styling across browsers */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Local font and color variables */
+:root {
+    /* Color Variables */
+    --color-green: #004d40;
+    --color-lightgold: #F7E7CE;
+    --color-beige: #d0b8a8;
+    --color-darkgrey: #2e2e2e;
+    --color-salmon: #f08080;
+    --color-white: #f5f5f5;
+    --color-black: #000000;
+    --color-lightgray: #aaa;
+
+    /* Font Variables */
+    --font-body: 'Crimson Pro', serif;
+    --font-heading: 'Cormorant Garamond', serif;
+}
+
+body {
+    font-family: 'Cormorant Garamond', serif;
+    background: radial-gradient(circle, #F7E7CE 40%, #f08080 100%);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+.feedback-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.feedback-form {
+    background: var(--color-lightgold);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+}
+
+.feedback-form h2 {
+    margin-bottom: 20px;
+}
+
+.feedback-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.feedback-form .radio-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.feedback-form input[type="radio"] {
+    margin-right: 2px;
+}
+
+.feedback-form input,
+.feedback-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.feedback-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--color-green);
+    color: var(--color-white);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.feedback-form button:hover {
+    background-color: var(--color-salmon);
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Black with opacity */
+}
+
+.modal-content {
+    background-color: var(--color-lightgold);
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    /* Could be more or less, depending on screen size */
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(145, 2, 0, 0.562),
+        0 4px 6px rgba(145, 2, 0, 0.562);
+}
+
+.modal-close {
+    color: var(--color-lightgray);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+    color: var(--color-black);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal h2 {
+    color: var(--color-green);
+}

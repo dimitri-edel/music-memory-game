@@ -1,0 +1,35 @@
+Composer: Bach
+Song: Tocata & Fugue
+
+Composer: Beethoven
+Song: Ninth Symphony
+
+Composer: Brahms
+Song: Tragic Overture
+
+Composer: Chopin
+Song: Nocturne No.2
+
+Composer: Johann Strauss
+Song: Voices of Spring
+
+Composer: Mozart
+Song: Symphony No.40
+
+Composer: Rossini
+Song: The Barber of Seville
+
+Composer: Satie
+Song: Gnossienne No.1
+
+Composer: Sibelius
+Song: Andante Festivo
+
+Composer: Tchaikovski
+Song: Swan Lake
+
+Composer: Verdi
+Song: Aida
+
+Composer: Vivaldi
+Song: Winter
