@@ -4,7 +4,7 @@ var root_url = '';
 if (currnet_root_url.includes('localhost') || currnet_root_url.includes('127.0.0.1')) {
     root_url = currnet_root_url;
 } else {
-    root_url = currnet_root_url + "/music_non_stop";
+    root_url = currnet_root_url + "/music-memory-game";
 }
 
 on_test_button_click = () => {
