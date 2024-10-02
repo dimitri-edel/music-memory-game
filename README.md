@@ -262,12 +262,27 @@ The constructor accepts two parameters **path** and **playlist**.
 - **playlist**: An array of audio file names without the extension. All files must be in mp3 format. Example:
 
   <code>
-  // array with mp3 filenames  
-  const playlist = ["symphony1", "symphony2", "mozart-track1", "bach-track1"];  
+  // Array with objects containing the filename of the audio-file(filename:?)  
+  // The objects contains description of the audio-file, such as name of the composer, title 
+  // and an image that will be rendered on the flip-side of the cube
+  const descriptions = [
+            { filename: "Bach", composer: "Bach", title: "Tocata & Fugue", image_filename: "Bach.png" },
+            { filename: "Beethoven", composer: "Beethoven", title: "Ninth Symphony", image_filename: "Beethoven.jpg" },
+            { filename: "Brahms", composer: "Brahms", title: "Tragic Overture", image_filename: "Brahms.jpg" },
+            { filename: "Chopin", composer: "Chopin", title: "Nocturne No.2", image_filename: "chopin.jpeg" },
+            { filename: "Johann Strauss", composer: "Johann Strauss", title: "Voices of Spring", image_filename: "Johann_Strauss.jpg" },
+            { filename: "Mozart", composer: "Mozart", title: "Symphony No.40", image_filename: "mozart.jpg" },
+            { filename: "Rossini", composer: "Rossini", title: "The Barber of Seville", image_filename: "Rossini.jpg" },
+            { filename: "Satie", composer: "Satie", title: "Gnossienne No.1", image_filename: "Satie.jpg" },
+            { filename: "Sibelius", composer: "Sibelius", title: "Andante Festivo", image_filename: "Sibelius.jpg" },
+            { filename: "Tchaikovski", composer: "Tchaikovski", title: "Swan Lake", image_filename: "tchaikovsky.jpg" },
+            { filename: "Verdi", composer: "Verdi", title: "Aida", image_filename: "Verdi.jpg" },
+            { filename: "Vivaldi", composer: "Vivaldi", title: "Winter", image_filename: "vivaldi.jpg" }
+        ];
   // path to the folder with the files  
   const path = "./js/audio/"  
   // create an instance of the mp3-player  
-  const player = new MP3Player(path, playlist);  
+  const player = new MP3Player(path, descriptions);  
   // Play the first track from the list (which is symphony1.mp3)  
   player.play(1);  
   </code>
@@ -292,6 +307,9 @@ The class implements all the essential methods for playing mp3 files:
 - `pause()`
 - `prev()`
 - `next()`
+- `setVolume`
+- `mute`
+
 
 </details>
 
@@ -309,37 +327,50 @@ JavaScript class for game logic
 
 ##### Constructor
 
-```constructor(cards, mp3player, gameOverCallback)```
+```constructor(cubes, mp3player)```
 
-The constructor takes a deck of cards(cards) a reference to the instance of the MP3Player for playing music.
+The constructor takes a stack of cubes(cubes) a reference to the instance of the MP3Player for playing music.
 And lastly a callback function, which a presentation layer component can supply, to execute when the game is over.
 
 ##### Important methods
 
 - ```addScore(number)```: is used for adding some extra score to the current game
-- ```pickCard(number)```: is used by the presentation layer to let the game know which card the player has picked
-- ```addShowTriviaQuestionsCallback(callback)```: Add a callback function for the event when the trivia question need to appear
-- ```addHideTriviaQuestionsCallback(callback)```: Add a callback function for the event when the trivia question need to dissapear
+- ```cubePicked(number)```: is used by the presentation layer to let the game know which card the player has picked
+- ```addEventListener(event, callback)```: Add an event-listener for a particular event. Multiple event-listeners(callback functions) can be added for any of the events.The event parameter is a string with the name of the event. The following events are available: ```cube-picked```, ```first-cube-picked```, ```very-first-cube-picked```, ```match-found```,  ```no-match-found```, ```game-over```, ```show-quiz```, ```hide-quiz```, ```show-quiz-placehoder```, ```update-score```
 - ```stopPlayback()```: Stop the playback of whichever track is playing
+- ```addScore(extraScore)``` - is not used at the moment, but can be used to add extra score
+- ```turnUpVolume()``` - is used by GameView to turn up the volume of the audio-player
+- ```turnDownVolume()``` - is used by GameView to turn down the volume of the audio-player
+- ```mute()``` - is not used at the moment but can be used to mute the audio-player
 
-#### GameCard class
+#### GameCube class
 
 This class encapsulates all the essential properties of a card for the game. 
 
 ##### Constructor
 
-```constructor(index, trackIndex, name, backgroundColor, composerImage, faceImage)```
+```constructor({ index, trackIndex, composer, title, composerImage, faceImage })```
 
-- index : the index of the associated card in the array, that is used by the Game object
+- index : the index of the associated cube in the array, that is used by the Game object
 - trackIndex : the index of the associated track in the playlist
-- name : name of the audio file
-- backgroundColor : background-color of the flipside of the card in case an image fails to load
+- composer : name of the composer
+- title : title of the associated track
 - composerImage : path to the image of the associated composer
 - faceImage : path to the image that is user as the face side of all the cards in the deck
 
 ##### Methods
 
 This class only has the render() method, which renders it as a HTML-Element.
+
+**IMPORTANT!** - the onclick event calls gameView.cubeClicked() method. Where gameView
+is the name of the instance of GameView class, which is described below this section.
+
+
+#### GameView class
+##### Methods
+
+#### Quiz class
+#### Methods
 
 </details>
 

@@ -30,7 +30,7 @@ class GameCube {
 
 
 class Game {
-    constructor(cubes, mp3player, gameOverCallback) {
+    constructor(cubes, mp3player) {
         // Array of GameCube objects
         this.cubes = cubes;
         // Instance of the MP3Player class
@@ -43,12 +43,6 @@ class Game {
         this.score = 0;
         // Number of cubes uncovered
         this.cubes_uncovered = 0;
-        // Callback function for game over
-        this.gameOverCallback = gameOverCallback;
-        // Callback function for showing trivia questions
-        this.showTrivaQuestionsCallback = null;
-        // Callback fucntion for hiding trivia questions
-        this.hideQuizCallback = null;
         this.timer = 0;
         this.timerInterval = null;
         this.time_of_last_cube_pick = 0;
@@ -71,13 +65,13 @@ class Game {
 
     addEventListener = (event, callback) => {
         switch (event) {
-            case "card-picked":
+            case "cube-picked":
                 this.CardPickedEventListeners.push(callback);
                 break;
-            case "first-card-picked":
+            case "first-cube-picked":
                 this.FirstCardPickedEventListeners.push(callback);
                 break;
-            case "very-first-card-picked":
+            case "very-first-cube-picked":
                 this.VeryFirstCardPickedEventListeners.push(callback);
                 break;
             case "match-found":
@@ -280,8 +274,8 @@ class GameView {
         this.game.addEventListener("match-found", this.matchFound);
         this.game.addEventListener("no-match-found", this.noMatchFound);
         this.game.addEventListener("update-score", this.updateScoreDisplay);
-        this.game.addEventListener("first-card-picked", this.firstCardPicked);
-        this.game.addEventListener("very-first-card-picked", this.veryFirstCardPicked);
+        this.game.addEventListener("first-cube-picked", this.firstCardPicked);
+        this.game.addEventListener("very-first-cube-picked", this.veryFirstCardPicked);
     }
 
     // Fisher Yates shuffle algorithm
@@ -353,26 +347,9 @@ class GameView {
             "face4.webp",
             "face5.webp",
         ];
-        return images;
-    }
+        return images;    }
 
-    getComposerImages = () => {
-        const images = [
-            "Bach.png",
-            "Beethoven.jpg",
-            "Brahms.jpg",
-            "chopin.jpeg",
-            "Johann_Strauss.jpg",
-            "mozart.jpg",
-            "Rossini.jpg",
-            "Satie.jpg",
-            "Sibelius.jpg",
-            "tchaikovsky.jpg",
-            "Verdi.jpg",
-            "vivaldi.jpg",
-        ];
-        return images;
-    }
+  
 
     getPlayListDescriptions = () => {
         const descriptions = [
@@ -455,8 +432,8 @@ class GameView {
         this.game.addEventListener("match-found", this.matchFound);
         this.game.addEventListener("no-match-found", this.noMatchFound);
         this.game.addEventListener("update-score", this.updateScoreDisplay);
-        this.game.addEventListener("first-card-picked", this.firstCardPicked);
-        this.game.addEventListener("very-first-card-picked", this.veryFirstCardPicked);
+        this.game.addEventListener("first-cube-picked", this.firstCardPicked);
+        this.game.addEventListener("very-first-cube-picked", this.veryFirstCardPicked);
     }
 
     removeCubesFromDOM = () => {
@@ -533,9 +510,6 @@ class GameView {
     }
 }
 
-// function checkQuizAnswer(answer) {
-//     gameView.quiz.guess(answer);
-// }
 
 const gameView = new GameView();
 var volume_slider = document.getElementById('volume-slide');
