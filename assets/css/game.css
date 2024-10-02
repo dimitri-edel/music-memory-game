@@ -54,8 +54,8 @@
 .button-container {
   display: flex;
   align-items: center; 
-  width: 100%;
-  margin-top: 20px;
+  width: 100%;  
+  margin: 5em auto 2em;
   grid-gap: 20px;
   flex-direction: row;
 }
