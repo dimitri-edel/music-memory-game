@@ -33,7 +33,9 @@ class Quiz {
         this.currentOptions = this.questions[0].options;
         this.shuffle(this.currentOptions);
     }
-
+    // This renders radio elements for each option
+    // The quiz must be embeded inside an element named gameView
+    // Heed the onclick event to call the guess method
     renderQuestion = () => {
         this.htmlContainer.innerHTML = `
             <div class="quiz-entire-line">${this.currentQuestion}</div>
@@ -44,7 +46,7 @@ class Quiz {
                         type="radio" id="option${index}" 
                         name="quiz-option" 
                         value="${option}" 
-                        onclick="checkQuizAnswer('${option}')"/> ${option}
+                        onclick="gameView.quiz.guess('${option}')"/> ${option}
                     </div>`)
                 .join("")}
             </div>
@@ -52,8 +54,7 @@ class Quiz {
         this.htmlContainer.style.display = "block";
     }
 
-    guess = (answer) => {        ;
-        console.log("Quiz.guess: game.score:"+this.game.score);
+    guess = (answer) => {        ;        
         if (answer === this.currentAnswer) {
             
             this.game.addScore(30);

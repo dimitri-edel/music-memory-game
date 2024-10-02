@@ -14,7 +14,7 @@ class GameCube {
     // Render the 3D cube
     render = () => {
         return `
-            <div id="cube-${this.index}" class="cube" onclick="cubeClicked(${this.index})">
+            <div id="cube-${this.index}" class="cube" onclick="gameView.cubeClicked(${this.index})">
                 <<div class="cube">
                 <div class="cube-front"><img src="${this.imgFace}" alt="image of composer"></div>
                 <div class="cube-back">Back</div>
@@ -198,17 +198,12 @@ class Game {
         return false;
     }
     // See if the same card has been picked twice
-    isSameCube = (n) => {
-        console.log("isSameCube");
-        console.log("first-cube:" + this.firstCube?.index);
-        console.log("n: " + n);
+    isSameCube = (n) => {       
         if (this.firstCube == null) return false;
         return this.firstCube.index === n;
     }
 
     calculateExtraScore = () => {
-        console.log("calculateExtraScore current score: " + this.score);
-
         /* The less time the players take to find a match, the more they score */
         let extra_score = 0;
         // Calculate the time difference between the last two card picks
@@ -216,8 +211,7 @@ class Game {
         // Convert the time difference to seconds
         let time_difference_seconds = time_difference / 1000;
         // Calculate the extra score based on the time difference
-        extra_score = Math.floor(50 / time_difference_seconds);
-        console.log("Extra score: " + extra_score);
+        extra_score = Math.floor(50 / time_difference_seconds);        
         // Add the extra score to the game score
         this.score += extra_score;
     }
@@ -408,25 +402,21 @@ class GameView {
         // Flip the cube over
         this.flipCubeOver(n);
         this.previous_cube = n;
-        this.flip_previous_cube = false;
-        console.log("Very first card picked");
+        this.flip_previous_cube = false;        
     }
     // The first card of a pair has been picked
     firstCardPicked = (n) => {
         // Flip the cube over
-        this.flipCubeOver(n);
-        // this.flipCubeBack(this.previous_cube);
+        this.flipCubeOver(n);        
         this.previous_cube = n;
-        this.flip_previous_cube = false
-        console.log("First card picked");
+        this.flip_previous_cube = false        
     }
 
     noMatchFound = (n) => {
         this.flipCubeBack(this.previous_cube);
         this.flipCubeOver(n);
         this.previous_cube = n;
-        this.flip_previous_cube = false;
-        console.log("No match found");
+        this.flip_previous_cube = false;        
     }
 
     // If a match has been found, the game logic will call this method
@@ -436,9 +426,7 @@ class GameView {
         this.showCubesBottom(n);
         this.showCubesBottom(this.previous_cube);
         this.previous_cube = null;
-        this.flip_previous_cube = false;
-        // this.updateScoreDisplay();
-        console.log("Match found");
+        this.flip_previous_cube = false;        
     }
 
     gameRestart = () => {
@@ -499,9 +487,7 @@ class GameView {
 
     showGameOverScreen = () => {
         // Show the game over popup
-        document.getElementById("game-over-screen").style.display = "flex";
-        // player.stop()
-        // stopTimer()
+        document.getElementById("game-over-screen").style.display = "flex";        
         // Update the final score
         document.getElementById("final-score").textContent = this.game.score;
 
@@ -543,18 +529,9 @@ class GameView {
     }
 }
 
-function cubeClicked(n) {
-    console.log(`Cube clicked: ${n}`);
-    gameView.cubeClicked(n);
-}
-
-function gameOver() {
-    console.log('Game Over');
-}
-
-function checkQuizAnswer(answer) {
-    gameView.quiz.guess(answer);
-}
+// function checkQuizAnswer(answer) {
+//     gameView.quiz.guess(answer);
+// }
 
 const gameView = new GameView();
 var volume_slider = document.getElementById('volume-slide');
