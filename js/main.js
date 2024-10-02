@@ -30,11 +30,14 @@ class GameCube {
 
 
 class Game {
-    constructor(cubes, mp3player) {
+    constructor() {
         // Array of GameCube objects
-        this.cubes = cubes;
+        this.cubes = [];
+        this.audio_files_path = "./assets/audio/";
+        this.playListDescriptions = this.getPlayListDescriptions();
+        this.generateGameCubes();
         // Instance of the MP3Player class
-        this.mp3player = mp3player;
+        this.audio_player = new MP3Player(this.audio_files_path, this.playListDescriptions);
         // First Cube selected
         this.firstCube = null;
         // Second Cube selected
@@ -97,17 +100,114 @@ class Game {
                 break;
         }
     }
+    // Fisher Yates shuffle algorithm
+    shuffle = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * i);
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    generateGameCubes = () => {
+        const path_to_composer_images = "./assets/images/composers/";
+        const path_to_face_images = "./assets/images/card_faces/";
+        var faceImages = this.getCardImages();
+
+
+        // Shuffle the face images array
+        this.shuffle(faceImages);
+        // array index track number in the playlist
+        let trackIndex = 0;
+        // Assign random track index between 0 and NUMBER_OF_CUBE_PAIRS to trackIndex
+        // This way it is ensured that the starting point of the playlist is different 
+        // each time and the following for-loop does not exceed the length of the playlist
+        trackIndex = Math.floor(Math.random() * NUMBER_OF_CUBE_PAIRS);
+
+        for (let i = 0; i < NUMBER_OF_CUBE_PAIRS; i++, trackIndex++) {
+            // assign filenames to the GameCard objects, based on the playlist array
+            // index, trackIndex, composer, title, composerImage, faceImag
+            this.cubes.push(
+                new GameCube(
+                    {
+                        index: i,
+                        trackIndex: trackIndex,
+                        composer: this.playListDescriptions[trackIndex].composer,
+                        title: this.playListDescriptions[trackIndex].title,
+                        composerImage: path_to_composer_images + this.playListDescriptions[trackIndex].image_filename,
+                        faceImage: path_to_face_images + faceImages[0]
+                    }
+                )
+            );
+            this.cubes.push(
+                new GameCube(
+                    {
+                        index: i,
+                        trackIndex: trackIndex,
+                        composer: this.playListDescriptions[trackIndex].composer,
+                        title: this.playListDescriptions[trackIndex].title,
+                        composerImage: path_to_composer_images + this.playListDescriptions[trackIndex].image_filename,
+                        faceImage: path_to_face_images + faceImages[0]
+                    }
+                )
+            );
+        }
+
+        // Shuffle the cubes array
+        this.shuffle(this.cubes);
+        // / Reassign the index property of each game cube to match its new position in the array
+        for (let i = 0; i < this.cubes.length; i++) {
+            this.cubes[i].index = i;
+        }
+    }
+
+    removeCubesFromDOM = () => {
+        var elements = document.getElementsByClassName("cube");
+        while (elements.length > 0) {
+            elements[0].parentNode.removeChild(elements[0]);
+        }
+    }
+
+    getCardImages = () => {
+        const images = [
+            "face1.webp",
+            "face2.webp",
+            "face3.webp",
+            "face4.webp",
+            "face5.webp",
+        ];
+        return images;
+    }
+
+
+
+    getPlayListDescriptions = () => {
+        const descriptions = [
+            { filename: "Bach", composer: "Bach", title: "Tocata & Fugue", image_filename: "Bach.png" },
+            { filename: "Beethoven", composer: "Beethoven", title: "Ninth Symphony", image_filename: "Beethoven.jpg" },
+            { filename: "Brahms", composer: "Brahms", title: "Tragic Overture", image_filename: "Brahms.jpg" },
+            { filename: "Chopin", composer: "Chopin", title: "Nocturne No.2", image_filename: "chopin.jpeg" },
+            { filename: "Johann Strauss", composer: "Johann Strauss", title: "Voices of Spring", image_filename: "Johann_Strauss.jpg" },
+            { filename: "Mozart", composer: "Mozart", title: "Symphony No.40", image_filename: "mozart.jpg" },
+            { filename: "Rossini", composer: "Rossini", title: "The Barber of Seville", image_filename: "Rossini.jpg" },
+            { filename: "Satie", composer: "Satie", title: "Gnossienne No.1", image_filename: "Satie.jpg" },
+            { filename: "Sibelius", composer: "Sibelius", title: "Andante Festivo", image_filename: "Sibelius.jpg" },
+            { filename: "Tchaikovski", composer: "Tchaikovski", title: "Swan Lake", image_filename: "tchaikovsky.jpg" },
+            { filename: "Verdi", composer: "Verdi", title: "Aida", image_filename: "Verdi.jpg" },
+            { filename: "Vivaldi", composer: "Vivaldi", title: "Winter", image_filename: "vivaldi.jpg" }
+        ];
+        return descriptions;
+    }
 
     restart = () => {
         this.firstCube = null;
         this.secondCube = null;
         this.score = 0;
         this.cubes_uncovered = 0;
-        this.mp3player.stop();
+        this.audio_player.stop();
     }
 
     stopPlayback = () => {
-        this.mp3player.stop();
+        this.audio_player.stop();
     }
 
     cubePicked = (n) => {
@@ -119,14 +219,14 @@ class Game {
             this.firstCube = this.cubes[n];
             this.time_of_last_cube_pick = Date.now();
             this.pickCount++;
-            this.mp3player.play(this.cubes[n].trackIndex);
+            this.audio_player.play(this.cubes[n].trackIndex);
             this.veryFirstCubePickedEventListeners.forEach(callback => callback(n));
             return;
         }
         // Card picked event
         this.CardPickedEventListeners.forEach(callback => callback(n));
         // Play the song associated with the Cube    
-        this.mp3player.play(this.cubes[n].trackIndex);
+        this.audio_player.play(this.cubes[n].trackIndex);
         // If the first Cube is null, it means that this is the first Cube to be selected
         if (this.firstCube == null && this.pickCount !== 0) {
             this.firstCube = this.cubes[n];
@@ -193,7 +293,7 @@ class Game {
         return false;
     }
     // See if the same card has been picked twice
-    isSameCube = (n) => {       
+    isSameCube = (n) => {
         if (this.firstCube == null) return false;
         return this.firstCube.index === n;
     }
@@ -206,7 +306,7 @@ class Game {
         // Convert the time difference to seconds
         let time_difference_seconds = time_difference / 1000;
         // Calculate the extra score based on the time difference
-        extra_score = Math.floor(50 / time_difference_seconds);        
+        extra_score = Math.floor(50 / time_difference_seconds);
         // Add the extra score to the game score
         this.score += extra_score;
     }
@@ -229,19 +329,19 @@ class Game {
     }
 
     stopPlayback = () => {
-        this.mp3player.stop();
+        this.audio_player.stop();
     }
 
     turnUpVolume = () => {
-        this.mp3player.turnUpVolume();
+        this.audio_player.turnUpVolume();
     }
 
     turnDownVolume = () => {
-        this.mp3player.turnDownVolume();
+        this.audio_player.turnDownVolume();
     }
 
     mute = () => {
-        this.mp3player.mute();
+        this.audio_player.mute();
     }
 }
 
@@ -249,28 +349,20 @@ class Game {
 class GameView {
     constructor() {
         this.game = null;
-        this.playListDescriptions = this.getPlayListDescriptions();
-
-        this.audio_files_path = "./assets/audio/";
-        this.audio_player = new MP3Player(this.audio_files_path, this.playListDescriptions);
         // Variable to store the index of the previously selected cube
         this.previous_cube = 0;
-        this.cubes = [];
         this.uncovered_cubes = [];
-        this.flip_previous_cube = false;
-
         this.quiz = null;
     }
 
     // intialize the game
     initGame = () => {
-        this.generateGameCubes();
-        this.game = new Game(this.cubes, this.audio_player, this.showGameOverScreen);
+        this.game = new Game();
         this.quiz = new Quiz(this.game, this);
         this.render();
         this.quiz.hideQuizContainer();
         this.hideGameOverScreen();
-        this.game.addEventListener("game-over", this.showGameOverScreen);        
+        this.game.addEventListener("game-over", this.showGameOverScreen);
         this.game.addEventListener("match-found", this.matchFound);
         this.game.addEventListener("no-match-found", this.noMatchFound);
         this.game.addEventListener("update-score", this.updateScoreDisplay);
@@ -278,96 +370,6 @@ class GameView {
         this.game.addEventListener("very-first-cube-picked", this.veryFirstCubePicked);
     }
 
-    // Fisher Yates shuffle algorithm
-    shuffle = (array) => {
-        for (let i = array.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * i);
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
-
-    generateGameCubes = () => {
-        const path_to_composer_images = "./assets/images/composers/";
-        const path_to_face_images = "./assets/images/card_faces/";
-        var faceImages = this.getCardImages();
-
-
-        // Shuffle the face images array
-        this.shuffle(faceImages);
-        // array index track number in the playlist
-        let trackIndex = 0;
-        // Assign random track index between 0 and NUMBER_OF_CUBE_PAIRS to trackIndex
-        // This way it is ensured that the starting point of the playlist is different 
-        // each time and the following for-loop does not exceed the length of the playlist
-        trackIndex = Math.floor(Math.random() * NUMBER_OF_CUBE_PAIRS);
-
-        for (let i = 0; i < NUMBER_OF_CUBE_PAIRS; i++, trackIndex++) {
-            // assign filenames to the GameCard objects, based on the playlist array
-            // index, trackIndex, composer, title, composerImage, faceImag
-            this.cubes.push(
-                new GameCube(
-                    {
-                        index: i,
-                        trackIndex: trackIndex,
-                        composer: this.playListDescriptions[trackIndex].composer,
-                        title: this.playListDescriptions[trackIndex].title,
-                        composerImage: path_to_composer_images + this.playListDescriptions[trackIndex].image_filename,
-                        faceImage: path_to_face_images + faceImages[0]
-                    }
-                )
-            );
-            this.cubes.push(
-                new GameCube(
-                    {
-                        index: i,
-                        trackIndex: trackIndex,
-                        composer: this.playListDescriptions[trackIndex].composer,
-                        title: this.playListDescriptions[trackIndex].title,
-                        composerImage: path_to_composer_images + this.playListDescriptions[trackIndex].image_filename,
-                        faceImage: path_to_face_images + faceImages[0]
-                    }
-                )
-            );
-        }
-
-        // Shuffle the cubes array
-        this.shuffle(this.cubes);
-        // / Reassign the index property of each game cube to match its new position in the array
-        for (let i = 0; i < this.cubes.length; i++) {
-            this.cubes[i].index = i;
-        }
-    }
-
-
-    getCardImages = () => {
-        const images = [
-            "face1.webp",
-            "face2.webp",
-            "face3.webp",
-            "face4.webp",
-            "face5.webp",
-        ];
-        return images;    }
-
-  
-
-    getPlayListDescriptions = () => {
-        const descriptions = [
-            { filename: "Bach", composer: "Bach", title: "Tocata & Fugue", image_filename: "Bach.png" },
-            { filename: "Beethoven", composer: "Beethoven", title: "Ninth Symphony", image_filename: "Beethoven.jpg" },
-            { filename: "Brahms", composer: "Brahms", title: "Tragic Overture", image_filename: "Brahms.jpg" },
-            { filename: "Chopin", composer: "Chopin", title: "Nocturne No.2", image_filename: "chopin.jpeg" },
-            { filename: "Johann Strauss", composer: "Johann Strauss", title: "Voices of Spring", image_filename: "Johann_Strauss.jpg" },
-            { filename: "Mozart", composer: "Mozart", title: "Symphony No.40", image_filename: "mozart.jpg" },
-            { filename: "Rossini", composer: "Rossini", title: "The Barber of Seville", image_filename: "Rossini.jpg" },
-            { filename: "Satie", composer: "Satie", title: "Gnossienne No.1", image_filename: "Satie.jpg" },
-            { filename: "Sibelius", composer: "Sibelius", title: "Andante Festivo", image_filename: "Sibelius.jpg" },
-            { filename: "Tchaikovski", composer: "Tchaikovski", title: "Swan Lake", image_filename: "tchaikovsky.jpg" },
-            { filename: "Verdi", composer: "Verdi", title: "Aida", image_filename: "Verdi.jpg" },
-            { filename: "Vivaldi", composer: "Vivaldi", title: "Winter", image_filename: "vivaldi.jpg" }
-        ];
-        return descriptions;
-    }
 
     cubeClicked = (n) => {
         this.quiz.showQuizPlaceholder();
@@ -379,21 +381,18 @@ class GameView {
         // Flip the cube over
         this.flipCubeOver(n);
         this.previous_cube = n;
-        this.flip_previous_cube = false;        
     }
     // The first card of a pair has been picked
     firstCubePicked = (n) => {
         // Flip the cube over
-        this.flipCubeOver(n);        
+        this.flipCubeOver(n);
         this.previous_cube = n;
-        this.flip_previous_cube = false        
     }
 
     noMatchFound = (n) => {
         this.flipCubeBack(this.previous_cube);
         this.flipCubeOver(n);
         this.previous_cube = n;
-        this.flip_previous_cube = false;        
     }
 
     // If a match has been found, the game logic will call this method
@@ -403,7 +402,6 @@ class GameView {
         this.showCubesBottom(n);
         this.showCubesBottom(this.previous_cube);
         this.previous_cube = null;
-        this.flip_previous_cube = false;        
     }
 
     gameRestart = () => {
@@ -411,35 +409,28 @@ class GameView {
         this.quiz.showQuizPlaceholder();
         // Reset the timer back to 00:00
         resetTimer();
-        this.audio_player.stop();
+        this.game.audio_player.stop();
         // Set the html content of the score display to 0
         const scoreDisplay = document.getElementById("score");
         scoreDisplay.textContent = 0;
 
         // clear the covered cubes array
-        this.uncovered_subes = [];
-        this.previous_sube = null;
-        this.removeCubesFromDOM();
-        this.cubes = [];
-        this.generateGameCubes();
-        this.game = new Game(this.cubes, this.audio_player, this.showGameOverScreen);
+        this.uncovered_cubes = [];
+        this.previous_cube = null;
+        // Remove the cubes from the DOM
+        this.game.removeCubesFromDOM();
+
+        this.game = new Game();
         this.quiz = new Quiz(this.game, this);
         this.render();
         this.quiz.hideQuizContainer();
         this.hideGameOverScreen();
-        this.game.addEventListener("game-over", this.showGameOverScreen);        
+        this.game.addEventListener("game-over", this.showGameOverScreen);
         this.game.addEventListener("match-found", this.matchFound);
         this.game.addEventListener("no-match-found", this.noMatchFound);
         this.game.addEventListener("update-score", this.updateScoreDisplay);
         this.game.addEventListener("first-cube-picked", this.firstCubePicked);
         this.game.addEventListener("very-first-cube-picked", this.veryFirstCubePicked);
-    }
-
-    removeCubesFromDOM = () => {
-        var elements = document.getElementsByClassName("cube");
-        while (elements.length > 0) {
-            elements[0].parentNode.removeChild(elements[0]);
-        }
     }
 
     updateScoreDisplay = () => {
@@ -465,7 +456,7 @@ class GameView {
         // Show the game over popup
         document.getElementById("game-over-screen").style.display = "flex";
         // Stop the playback of the audio
-        this.audio_player.stop();
+        this.game.audio_player.stop();
         // Stop the timer
         stopTimer()
         // Update the final score
@@ -498,13 +489,13 @@ class GameView {
         // Hide the game over popup
         document.getElementById("game-over-screen").style.display = "none";
     }
-    
+
     // Method for rendering the game
     render = () => {
         let container = document.getElementById('cubes-container');
         // Loop through the cubes and render them
         for (let i = 0; i < this.game.cubes.length; i++) {
-            container.innerHTML += this.cubes[i].render();
+            container.innerHTML += this.game.cubes[i].render();
         }
     }
 }
@@ -516,7 +507,7 @@ gameView.initGame();
 // Event listener for the volume slider
 volume_slider.oninput = function () {
     let value = (this.value != null) ? this.value : 50;
-    gameView.game.mp3player.setVolume(value / 100);
+    gameView.game.audio_player.setVolume(value / 100);
 };
 
 
