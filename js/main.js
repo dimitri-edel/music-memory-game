@@ -56,9 +56,9 @@ class Game {
         this.NoMatchFoundEventListeners = [];
         this.UpdateScoreEventListeners = [];
         // Event for the first card of a pair being picked
-        this.FirstCardPickedEventListeners = [];
+        this.firstCubePickedEventListeners = [];
         // Event for the very first card picked in the game
-        this.VeryFirstCardPickedEventListeners = [];
+        this.veryFirstCubePickedEventListeners = [];
         // Event for showing the quiz placeholder
         this.ShowQuizPlaceholderEventListeners = [];
     }
@@ -69,10 +69,10 @@ class Game {
                 this.CardPickedEventListeners.push(callback);
                 break;
             case "first-cube-picked":
-                this.FirstCardPickedEventListeners.push(callback);
+                this.firstCubePickedEventListeners.push(callback);
                 break;
             case "very-first-cube-picked":
-                this.VeryFirstCardPickedEventListeners.push(callback);
+                this.veryFirstCubePickedEventListeners.push(callback);
                 break;
             case "match-found":
                 this.MatchFoundEventListeners.push(callback);
@@ -119,7 +119,8 @@ class Game {
             this.firstCube = this.cubes[n];
             this.time_of_last_cube_pick = Date.now();
             this.pickCount++;
-            this.VeryFirstCardPickedEventListeners.forEach(callback => callback(n));
+            this.mp3player.play(this.cubes[n].trackIndex);
+            this.veryFirstCubePickedEventListeners.forEach(callback => callback(n));
             return;
         }
         // Card picked event
@@ -131,7 +132,7 @@ class Game {
             this.firstCube = this.cubes[n];
             this.time_of_last_cube_pick = Date.now();
             // First card picked event
-            this.FirstCardPickedEventListeners.forEach(callback => callback(n));
+            this.firstCubePickedEventListeners.forEach(callback => callback(n));
             // Show quiz placeholder event
             this.ShowQuizPlaceholderEventListeners.forEach(callback => callback());
             // Hide quiz event
@@ -269,13 +270,12 @@ class GameView {
         this.render();
         this.quiz.hideQuizContainer();
         this.hideGameOverScreen();
-        this.game.addEventListener("game-over", this.showGameOverScreen);
-        this.game.addEventListener("hide-quiz", this.quiz.hideQuizContainer);
+        this.game.addEventListener("game-over", this.showGameOverScreen);        
         this.game.addEventListener("match-found", this.matchFound);
         this.game.addEventListener("no-match-found", this.noMatchFound);
         this.game.addEventListener("update-score", this.updateScoreDisplay);
-        this.game.addEventListener("first-cube-picked", this.firstCardPicked);
-        this.game.addEventListener("very-first-cube-picked", this.veryFirstCardPicked);
+        this.game.addEventListener("first-cube-picked", this.firstCubePicked);
+        this.game.addEventListener("very-first-cube-picked", this.veryFirstCubePicked);
     }
 
     // Fisher Yates shuffle algorithm
@@ -375,14 +375,14 @@ class GameView {
         this.game.cubePicked(n);
     }
     // The very first card in the game has been picked
-    veryFirstCardPicked = (n) => {
+    veryFirstCubePicked = (n) => {
         // Flip the cube over
         this.flipCubeOver(n);
         this.previous_cube = n;
         this.flip_previous_cube = false;        
     }
     // The first card of a pair has been picked
-    firstCardPicked = (n) => {
+    firstCubePicked = (n) => {
         // Flip the cube over
         this.flipCubeOver(n);        
         this.previous_cube = n;
@@ -427,13 +427,12 @@ class GameView {
         this.render();
         this.quiz.hideQuizContainer();
         this.hideGameOverScreen();
-        this.game.addEventListener("game-over", this.showGameOverScreen);
-        this.game.addEventListener("hide-quiz", this.quiz.hideQuizContainer);
+        this.game.addEventListener("game-over", this.showGameOverScreen);        
         this.game.addEventListener("match-found", this.matchFound);
         this.game.addEventListener("no-match-found", this.noMatchFound);
         this.game.addEventListener("update-score", this.updateScoreDisplay);
-        this.game.addEventListener("first-cube-picked", this.firstCardPicked);
-        this.game.addEventListener("very-first-cube-picked", this.veryFirstCardPicked);
+        this.game.addEventListener("first-cube-picked", this.firstCubePicked);
+        this.game.addEventListener("very-first-cube-picked", this.veryFirstCubePicked);
     }
 
     removeCubesFromDOM = () => {
@@ -499,7 +498,7 @@ class GameView {
         // Hide the game over popup
         document.getElementById("game-over-screen").style.display = "none";
     }
-
+    
     // Method for rendering the game
     render = () => {
         let container = document.getElementById('cubes-container');
@@ -513,9 +512,11 @@ class GameView {
 
 const gameView = new GameView();
 var volume_slider = document.getElementById('volume-slide');
-volume_slider.oninput = function () {
-    gameView.game.mp3player.setVolume(this.value / 100);
-};
 gameView.initGame();
+// Event listener for the volume slider
+volume_slider.oninput = function () {
+    let value = (this.value != null) ? this.value : 50;
+    gameView.game.mp3player.setVolume(value / 100);
+};
 
 
