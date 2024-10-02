@@ -10,6 +10,7 @@ class Quiz {
         this.htmlContainer = document.getElementById("quiz-container");
         this.game.addEventListener("hide-quiz", this.hideQuizContainer);
         this.game.addEventListener("show-quiz", this.showQuiz);
+        this.game.addEventListener("show-quiz-placeholder", this.showQuizPlaceholder);
     }
 
     shuffle(array) {

@@ -59,12 +59,14 @@ class Game {
         this.HideQuizEventListeners = [];
         this.ShowQuizEventListeners = [];
         this.MatchFoundEventListeners = [];
-        this.NoMatchFoundListeners = [];
+        this.NoMatchFoundEventListeners = [];
         this.UpdateScoreEventListeners = [];
         // Event for the first card of a pair being picked
         this.FirstCardPickedEventListeners = [];
         // Event for the very first card picked in the game
         this.VeryFirstCardPickedEventListeners = [];
+        // Event for showing the quiz placeholder
+        this.ShowQuizPlaceholderEventListeners = [];
     }
 
     addEventListener = (event, callback) => {
@@ -82,16 +84,19 @@ class Game {
                 this.MatchFoundEventListeners.push(callback);
                 break;
             case "no-match-found":
-                this.NoMatchFoundListeners.push(callback);
+                this.NoMatchFoundEventListeners.push(callback);
                 break;
             case "game-over":
                 this.GameOverEventListeners.push(callback);
                 break;
+            case "show-quiz":
+                this.ShowQuizEventListeners.push(callback);
+                break;
             case "hide-quiz":
                 this.HideQuizEventListeners.push(callback);
                 break;
-            case "show-quiz":
-                this.ShowQuizEventListeners.push(callback);
+            case "show-quiz-placeholder":
+                this.ShowQuizPlaceholderEventListeners.push(callback);
                 break;
             case "update-score":
                 this.UpdateScoreEventListeners.push(callback);
@@ -112,7 +117,7 @@ class Game {
     }
 
     cubePicked = (n) => {
-        if (this.isSameCard(n)) {
+        if (this.isSameCube(n)) {
             return false;
         }
         // If pick count is 0, it means it is the very first card picked in the game
@@ -133,6 +138,10 @@ class Game {
             this.time_of_last_cube_pick = Date.now();
             // First card picked event
             this.FirstCardPickedEventListeners.forEach(callback => callback(n));
+            // Show quiz placeholder event
+            this.ShowQuizPlaceholderEventListeners.forEach(callback => callback());
+            // Hide quiz event
+            this.HideQuizEventListeners.forEach(callback => callback());
         }// If the second Cube is null, it means that this is the second Cube to be selected
         else if (this.secondCube == null) {
             this.secondCube = this.cubes[n];
@@ -185,12 +194,12 @@ class Game {
         this.firstCube = this.cubes[n];
         this.secondCube = null;
         // No match found event
-        this.NoMatchFoundListeners.forEach(callback => callback(n));
+        this.NoMatchFoundEventListeners.forEach(callback => callback(n));
         return false;
     }
     // See if the same card has been picked twice
-    isSameCard = (n) => {
-        console.log("isSameCard");
+    isSameCube = (n) => {
+        console.log("isSameCube");
         console.log("first-cube:" + this.firstCube?.index);
         console.log("n: " + n);
         if (this.firstCube == null) return false;
