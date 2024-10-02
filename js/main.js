@@ -487,7 +487,11 @@ class GameView {
 
     showGameOverScreen = () => {
         // Show the game over popup
-        document.getElementById("game-over-screen").style.display = "flex";        
+        document.getElementById("game-over-screen").style.display = "flex";
+        // Stop the playback of the audio
+        this.audio_player.stop();
+        // Stop the timer
+        stopTimer()
         // Update the final score
         document.getElementById("final-score").textContent = this.game.score;
 
