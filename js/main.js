@@ -80,7 +80,7 @@ class Game {
         // Event for the very first card picked in the game
         this.veryFirstCubePickedEvent = new GameEvent();
         // Event for showing the quiz placeholder
-        this.ShowQuizPlaceholderEvent = new GameEvent();
+        this.ShowQuizPlaceholderEvent = new GameEvent();       
     }
 
     addEventListener = (event, callback) => {
@@ -194,8 +194,6 @@ class Game {
         ];
         return images;
     }
-
-
 
     getPlayListDescriptions = () => {
         const descriptions = [
