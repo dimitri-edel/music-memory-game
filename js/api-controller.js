@@ -62,11 +62,7 @@ class ApiController {
                     if (this.playlist.length > 0) {
                         this.playlist = [];
                     }
-                    data.forEach((playlist) => {
-                        // Add every playlist to the playlist array
-                        this.playlist.push(playlist);
-                        console.log(this.playlist);
-                    });
+                    this.playlist = data;
                     resolve(this.playlist);
                 }).catch((error) => {
                     reject(error);
@@ -132,3 +128,5 @@ class ApiController {
         });
     }
 }
+
+apiController = new ApiController();

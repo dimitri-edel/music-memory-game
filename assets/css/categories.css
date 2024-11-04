@@ -1,5 +1,29 @@
+h1 {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+h2 {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+#category-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;    
+}
+
 #category-list img {
     width: 150px;
     height: auto;
     object-fit: cover;
+}
+
+.category-card {   
+    width: 152px;
+    height:auto;
+    border: 1px solid rgb(128, 108, 0);
+    background: linear-gradient(to right, rgba(165, 164, 155, 0.476), rgba(255, 255, 255, 0.03), rgba(165, 164, 155, 0.476));
 }

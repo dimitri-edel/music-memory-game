@@ -80,7 +80,7 @@ class Game {
         // Event for the very first card picked in the game
         this.veryFirstCubePickedEvent = new GameEvent();
         // Event for showing the quiz placeholder
-        this.ShowQuizPlaceholderEvent = new GameEvent();       
+        this.ShowQuizPlaceholderEvent = new GameEvent();
     }
 
     addEventListener = (event, callback) => {
@@ -117,6 +117,44 @@ class Game {
                 break;
         }
     }
+
+    loadResources = () => {
+        return new Promise((resolve, reject) => {
+            // if category has been passed as a parameter in the url
+            const url_query = window.location.search;
+            const urlParams = new URLSearchParams(url_query);
+            const category_id = urlParams.get('category_id');
+            if (category_id !== null && category_id !== undefined) {
+                // Load the playlist from the API (instance of the ApiController class is instanciated in api-controller.js)
+                let playlist_loaded = apiController.getPlaylist(category_id);
+                playlist_loaded.then((data) => {
+                    this.playListDescriptions = this.createDescriptionsFromApiController();
+                    this.cubes = [];
+                    this.generateGameCubes();
+                    resolve(data);
+                }).catch((error) => {
+                    reject(error);
+                });
+            } else {
+                reject("No category id found in the URL");
+            }
+        });
+    }
+
+    createDescriptionsFromApiController = () => {
+        let descriptions = [];
+        apiController.playlist.forEach((item) => {
+            let description = {
+                filename: item.audio,
+                composer: item.title,
+                title: item.description,
+                image_filename: item.image
+            };
+            descriptions.push(description);
+        });
+        return descriptions;
+    }
+
     // Fisher Yates shuffle algorithm
     shuffle = (array) => {
         for (let i = array.length - 1; i > 0; i--) {
@@ -125,8 +163,7 @@ class Game {
         }
     }
 
-    generateGameCubes = () => {
-        const path_to_composer_images = "./assets/images/composers/";
+    generateGameCubes = () => {                        
         const path_to_face_images = "./assets/images/card_faces/";
         var faceImages = this.getCardImages();
 
@@ -140,6 +177,7 @@ class Game {
         // each time and the following for-loop does not exceed the length of the playlist
         trackIndex = Math.floor(Math.random() * NUMBER_OF_CUBE_PAIRS);
 
+        // IMPORTANT: base_url is defined in api-controller.js
         for (let i = 0; i < NUMBER_OF_CUBE_PAIRS; i++, trackIndex++) {
             // assign filenames to the GameCard objects, based on the playlist array
             // index, trackIndex, composer, title, composerImage, faceImag
@@ -150,7 +188,7 @@ class Game {
                         trackIndex: trackIndex,
                         composer: this.playListDescriptions[trackIndex].composer,
                         title: this.playListDescriptions[trackIndex].title,
-                        composerImage: path_to_composer_images + this.playListDescriptions[trackIndex].image_filename,
+                        composerImage:  base_url+this.playListDescriptions[trackIndex].image_filename,
                         faceImage: path_to_face_images + faceImages[0]
                     }
                 )
@@ -162,7 +200,7 @@ class Game {
                         trackIndex: trackIndex,
                         composer: this.playListDescriptions[trackIndex].composer,
                         title: this.playListDescriptions[trackIndex].title,
-                        composerImage: path_to_composer_images + this.playListDescriptions[trackIndex].image_filename,
+                        composerImage:  base_url+this.playListDescriptions[trackIndex].image_filename,
                         faceImage: path_to_face_images + faceImages[0]
                     }
                 )
@@ -227,7 +265,7 @@ class Game {
 
     cubePicked = (n) => {
         // If the cube has already been uncovered, do nothing
-        if(this.isUncoveredCube(n)) {
+        if (this.isUncoveredCube(n)) {
             return;
         }
 
@@ -290,14 +328,14 @@ class Game {
             this.score++;
             this.calculateExtraScore();
             this.cubes_uncovered += 2;
-            
+
             // Update score event
             this.UpdateScoreEvent.data = { score: this.score };
             this.UpdateScoreEvent.notify();
-            
+
             // Show quiz event
             this.ShowQuizEvent.notify();
-            
+
             if (this.isGameOver()) {
                 // Hide quiz event
                 this.HideQuizEvent.notify();
@@ -305,11 +343,11 @@ class Game {
                 this.onGameOver(this);
             }
             // Match found event    
-            console.log("Match found: " + n);        
-            this.MatchFoundEvent.data = { first_index: this.firstCube.index, second_index: this.secondCube.index };            
+            console.log("Match found: " + n);
+            this.MatchFoundEvent.data = { first_index: this.firstCube.index, second_index: this.secondCube.index };
             this.uncoveredCubes.push(this.firstCube);
             this.uncoveredCubes.push(this.secondCube);
-            this.MatchFoundEvent.notify();            
+            this.MatchFoundEvent.notify();
             // Reset the first and second cubes for the next pair
             this.firstCube = null;
             this.secondCube = null;
@@ -321,7 +359,7 @@ class Game {
         // Copy the data to the event object
         this.NoMatchFoundEvent.data = { first_index: this.firstCube.index, second_index: this.secondCube.index };
         console.log("No match found: " + n);
-        this.NoMatchFoundEvent.notify();        
+        this.NoMatchFoundEvent.notify();
         // Reset the first and second cubes to indicate that this was the first card in a pair
         this.firstCube = this.cubes[n];
         this.secondCube = null;
@@ -393,13 +431,22 @@ class Game {
 // View Class for the Game
 class GameView {
     constructor() {
-        this.game = null;        
+        this.game = null;
         this.quiz = null;
+        this.api_recources_loaded = false;
     }
 
     // intialize the game
     initGame = () => {
         this.game = new Game();
+        let api_resources_loaded = this.game.loadResources();
+        // Rerender the game after the API resources have been loaded
+        api_resources_loaded.then(() => {
+            this.api_recources_loaded = true;
+            this.render();
+        }).catch((error) => {
+            console.error(error);
+        });
         this.quiz = new Quiz(this.game, this);
         this.render();
         this.quiz.hideQuizContainer();
@@ -412,7 +459,7 @@ class GameView {
         this.game.addEventListener("very-first-cube-picked", this.veryFirstCubePicked);
     }
 
-    cubeClicked = (n) => {        
+    cubeClicked = (n) => {
         // Forward the information to the game logic
         this.game.cubePicked(n);
     }
@@ -424,7 +471,7 @@ class GameView {
     // The first card of a pair has been picked
     firstCubePicked = (e) => {
         // Flip the cube over
-        this.flipCubeOver(e.data.index);        
+        this.flipCubeOver(e.data.index);
     }
 
     noMatchFound = (e) => {
@@ -435,7 +482,7 @@ class GameView {
     // If a match has been found, the game logic will call this method
     matchFound = (e) => {
         this.showCubesBottom(e.data.first_index);
-        this.showCubesBottom(e.data.second_index);        
+        this.showCubesBottom(e.data.second_index);
     }
 
     gameRestart = () => {
@@ -446,7 +493,7 @@ class GameView {
         this.game.audio_player.stop();
         // Set the html content of the score display to 0
         const scoreDisplay = document.getElementById("score");
-        scoreDisplay.textContent = 0;              
+        scoreDisplay.textContent = 0;
         // Remove the cubes from the DOM
         this.game.removeCubesFromDOM();
 
@@ -523,9 +570,15 @@ class GameView {
     // Method for rendering the game
     render = () => {
         let container = document.getElementById('cubes-container');
-        // Loop through the cubes and render them
-        for (let i = 0; i < this.game.cubes.length; i++) {
-            container.innerHTML += this.game.cubes[i].render();
+        if (this.api_recources_loaded) {
+            // Remove loading message from the container
+            container.innerHTML = "";
+            // Loop through the cubes and render them
+            for (let i = 0; i < this.game.cubes.length; i++) {
+                container.innerHTML += this.game.cubes[i].render();
+            }
+        }else{
+            container.innerHTML = `<div id="loading_message">Loading...</div>`;
         }
     }
 }
@@ -539,5 +592,3 @@ volume_slider.oninput = function () {
     let value = (this.value != null) ? this.value : 50;
     gameView.game.audio_player.setVolume(value / 100);
 };
-
-
