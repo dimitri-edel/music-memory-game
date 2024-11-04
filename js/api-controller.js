@@ -33,7 +33,7 @@ class ApiController {
                         this.categories.push(category);
                         console.log(this.categories);
                     });
-                    resolve(this.categories);
+                    resolve(data);
                 }).catch((error) => {
                     reject(error);
                 });
@@ -96,31 +96,24 @@ class ApiController {
                     if (this.quiz.length > 0) {
                         this.quiz = [];
                     }
-                    data.forEach((quiz) => {
-                        // Add every quiz to the quiz array
-                        this.quiz.push(quiz);
+                    let load_json_from_url = this.fetchQuizJSONAsObject(`${base_url}${data[0].json}`);
+                    load_json_from_url.then((quiz_json) => {
+                        this.quiz = quiz_json;
                         console.log(this.quiz);
-                    });
-                    resolve(quiz);
+                    }).catch((error) => {
+                        throw(error);
+                    });                    
+                    resolve(data);
                 }).catch((error) => {
                     reject(error);
                 });
 
         });
-        fetchQuiz.then(quiz => {
-            let fetchQuizJSON = this.fetchQuizJSONAsObject(`${base_url}/${quiz.json}`, quiz);
-            fetchQuizJSON.then(quizJSON => {
-                this.quiz.json = quizJSON;
-                console.log(quizJSON);
-            }).catch(error => {
-                throw(error);
-            });
-        }).catch(error => {
-            console.log(error);
-        });
+        return fetchQuiz;
     }
 
-    fetchQuizJSONAsObject(url, item) {
+    fetchQuizJSONAsObject(url) {
+        console.log("fetchQuizJSONAsObject", url);
         return new Promise((resolve, reject) => {
             fetch(url)
                 .then(response => {
@@ -130,6 +123,7 @@ class ApiController {
                     return response.json();
                 })
                 .then(data => {
+                    this.quiz = data;
                     resolve(data);
                 })
                 .catch(error => {

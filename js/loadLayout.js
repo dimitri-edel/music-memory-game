@@ -11,6 +11,7 @@ function loadNavbar() {
         </div>
         <ul class="nav-links" id="nav-links">
             <li><a href="index.html">Home</a></li>
+            <li><a href="categories.html">Categories</a></li>
             <li><a href="about.html">About Us</a></li>
             <li><a href="scoreboard.html">Scoreboard</a></li>
             <li><a href="feedbackform.html">Feedback</a></li>
