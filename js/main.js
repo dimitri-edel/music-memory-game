@@ -121,23 +121,19 @@ class Game {
     loadResources = () => {
         return new Promise((resolve, reject) => {
             // if category has been passed as a parameter in the url
-            const url_query = window.location.search;
-            const urlParams = new URLSearchParams(url_query);
-            const category_id = urlParams.get('category_id');
-            if (category_id !== null && category_id !== undefined) {
-                // Load the playlist from the API (instance of the ApiController class is instanciated in api-controller.js)
-                let playlist_loaded = apiController.getPlaylist(category_id);
-                playlist_loaded.then((data) => {
-                    this.playListDescriptions = this.createDescriptionsFromApiController();
-                    this.cubes = [];
-                    this.generateGameCubes();
-                    resolve(data);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject("No category id found in the URL");
-            }
+            const category_id = this.getCategory();
+
+            // Load the playlist from the API (instance of the ApiController class is instanciated in api-controller.js)
+            let playlist_loaded = apiController.getPlaylist(category_id);
+            playlist_loaded.then((data) => {
+                this.playListDescriptions = this.createDescriptionsFromApiController();
+                this.cubes = [];
+                this.generateGameCubes();
+                resolve(data);
+            }).catch((error) => {
+                reject(error);
+            });
+
         });
     }
 
@@ -163,7 +159,7 @@ class Game {
         }
     }
 
-    generateGameCubes = () => {                        
+    generateGameCubes = () => {
         const path_to_face_images = "./assets/images/card_faces/";
         var faceImages = this.getCardImages();
 
@@ -188,7 +184,7 @@ class Game {
                         trackIndex: trackIndex,
                         composer: this.playListDescriptions[trackIndex].composer,
                         title: this.playListDescriptions[trackIndex].title,
-                        composerImage:  base_url+this.playListDescriptions[trackIndex].image_filename,
+                        composerImage: base_url + this.playListDescriptions[trackIndex].image_filename,
                         faceImage: path_to_face_images + faceImages[0]
                     }
                 )
@@ -200,7 +196,7 @@ class Game {
                         trackIndex: trackIndex,
                         composer: this.playListDescriptions[trackIndex].composer,
                         title: this.playListDescriptions[trackIndex].title,
-                        composerImage:  base_url+this.playListDescriptions[trackIndex].image_filename,
+                        composerImage: base_url + this.playListDescriptions[trackIndex].image_filename,
                         faceImage: path_to_face_images + faceImages[0]
                     }
                 )
@@ -426,6 +422,13 @@ class Game {
     mute = () => {
         this.audio_player.mute();
     }
+
+    getCategory() {
+        const url_query = window.location.search;
+        const urlParams = new URLSearchParams(url_query);
+        const category_id = urlParams.get('category_id');
+        return category_id;
+    }
 }
 
 // View Class for the Game
@@ -498,6 +501,14 @@ class GameView {
         this.game.removeCubesFromDOM();
 
         this.game = new Game();
+        let api_resources_loaded = this.game.loadResources();
+        // Rerender the game after the API resources have been loaded
+        api_resources_loaded.then(() => {
+            this.api_recources_loaded = true;
+            this.render();
+        }).catch((error) => {
+            console.error(error);
+        });
         this.quiz = new Quiz(this.game, this);
         this.render();
         this.quiz.hideQuizContainer();
@@ -577,7 +588,7 @@ class GameView {
             for (let i = 0; i < this.game.cubes.length; i++) {
                 container.innerHTML += this.game.cubes[i].render();
             }
-        }else{
+        } else {
             container.innerHTML = `<div id="loading_message">Loading...</div>`;
         }
     }

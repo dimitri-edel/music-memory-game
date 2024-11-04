@@ -1,9 +1,9 @@
 // class for the quiz 
 class Quiz {
-    constructor(game, gameView) {
+    constructor(game, gameView){        
         this.game = game;
         this.gameView = gameView;
-        this.questions = triviaQuestions;
+        this.questions = [];
         this.currentQuestion = "";
         this.currentAnswer = "";
         this.currentOptions = [];
@@ -11,6 +11,26 @@ class Quiz {
         this.game.addEventListener("hide-quiz", this.hideQuizContainer);
         this.game.addEventListener("show-quiz", this.showQuiz);
         this.game.addEventListener("show-quiz-placeholder", this.showQuizPlaceholder);
+        this.loadQuestions();
+    }
+
+    getCategory() {
+        const url_query = window.location.search;
+        const urlParams = new URLSearchParams(url_query);
+        const category_id = urlParams.get('category_id');
+        return category_id;
+    }
+
+    loadQuestions = () => {
+        const category_id = this.getCategory();
+        // apiController is created in api-controller.js
+        let quiz_loaded = apiController.getQuiz(category_id);
+        quiz_loaded.then((data) => {
+            this.questions = apiController.quiz;
+            this.showQuizPlaceholder();
+        }).catch((error) => {
+            console.log("Error loading quiz: ", error);
+        });
     }
 
     shuffle(array) {

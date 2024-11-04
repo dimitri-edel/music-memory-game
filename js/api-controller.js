@@ -95,11 +95,10 @@ class ApiController {
                     let load_json_from_url = this.fetchQuizJSONAsObject(`${base_url}${data[0].json}`);
                     load_json_from_url.then((quiz_json) => {
                         this.quiz = quiz_json;
-                        console.log(this.quiz);
+                        resolve(data);                        
                     }).catch((error) => {
                         throw(error);
                     });                    
-                    resolve(data);
                 }).catch((error) => {
                     reject(error);
                 });
@@ -129,4 +128,4 @@ class ApiController {
     }
 }
 
-apiController = new ApiController();
+var apiController = new ApiController();
