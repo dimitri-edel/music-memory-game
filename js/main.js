@@ -129,6 +129,7 @@ class Game {
                 this.playListDescriptions = this.createDescriptionsFromApiController();
                 this.cubes = [];
                 this.generateGameCubes();
+                this.audio_player = new MP3Player(base_url, this.playListDescriptions);
                 resolve(data);
             }).catch((error) => {
                 reject(error);
