@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     modalStartButton.addEventListener("click", () => {
         welcomeModal.style.display = "none";
-        window.location.href = "category.html";
+        window.location.href = "categories.html";
     });
 
     function createConfetti() {

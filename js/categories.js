@@ -1,4 +1,4 @@
-let apiController = new ApiController();
+// apiController is a global variable defined in js/api-controller.js
 let categories_loaded = apiController.getCategories();
 
 categories_loaded.then((categories) => {
