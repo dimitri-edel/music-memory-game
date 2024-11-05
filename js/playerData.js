@@ -51,3 +51,16 @@ function loadScoreBoardData() {
     }
     return null; // No data found
 }
+
+// Save chosen category to local storage
+function saveCategory(category) {
+    localStorage.setItem('category', category);
+}
+// Load chosen category from local storage
+function loadCategory() {
+    const savedData = localStorage.getItem('category');
+    if (savedData) {
+        return savedData;
+    }
+    return null; // No data found
+}

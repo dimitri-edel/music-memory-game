@@ -19,6 +19,9 @@ function attach_category_to_DOM(category){
 }
 
 function start_game(category_id){
+    // Save chosen category to local storage
+    // The function saveCategory is defined in js/PlayerData.js
+    saveCategory(category_id);
     window.location.href = `game.html?category_id=${category_id}`;
 }
 

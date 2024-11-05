@@ -32,9 +32,12 @@ function renderScoreBoardData() {
 }
 
 function appendGameToNavBar() {
+    // load chosen category from local storage
+    // The function loadCategory is defined in js/PlayerData.js
+    const category = loadCategory();
     const navLinks = document.getElementById('nav-links');
     const gameLink = document.createElement('li');
-    gameLink.innerHTML = '<a href="game.html">Game</a>';
+    gameLink.innerHTML = `<a href="game.html?category_id=${category}">Game</a>`;
     navLinks.insertBefore(gameLink, navLinks.children[2]);
 }
 
