@@ -110,9 +110,8 @@
 }
 
 /* Player Buttons */
-#play {
-  color: black;
-  background-color: #004d40;
+#play {  
+  background-color: var(--secondary-color);
   border: none;
   color: white;
   padding: 15px 32px;
@@ -130,9 +129,8 @@
   transform: scale(1.1);
 }
 
-#pause {
-  color: black;
-  background-color: #d0b8a8;
+#pause {  
+  background-color: var(--complementary-color);
   border: none;
   color: white;
   padding: 15px 32px;
@@ -151,9 +149,8 @@
   transform: scale(1.1);
 }
 
-#stop {
-  color: black;
-  background-color: #f08080;
+#stop {  
+  background-color: var(--secondary-color);
   border: none;
   color: white;
   padding: 15px 32px;

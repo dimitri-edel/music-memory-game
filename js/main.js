@@ -208,8 +208,8 @@ class Game {
                 )
             );
         }
-
-        // Shuffle the cubes array twice to randomize the order of the cubes
+        // Shuffle the cubes array three times
+        this.shuffle(this.cubes);
         this.shuffle(this.cubes);
         this.shuffle(this.cubes);
         // / Reassign the index property of each game cube to match its new position in the array

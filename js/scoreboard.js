@@ -1,3 +1,4 @@
+// loadScoreBoardData() is defined in js/PlayerData.js
 const scoreBoardData = loadScoreBoardData();
 rank = 1;
 
