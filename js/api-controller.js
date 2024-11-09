@@ -5,6 +5,8 @@ class ApiController {
         this.categories = [];
         this.playlist = [];
         this.quiz = [];
+        this.styles = [];
+        this.faces = [];
     }
 
 
@@ -125,6 +127,59 @@ class ApiController {
                     reject(`Error loading json-file for the quiz: ${url} : ${error}`);
                 });
         });
+    }
+
+    getStyle = (category_id) => {
+        let promise = new Promise((resolve, reject) => {
+            const request = new Request(`${base_url}/styles/get-by-category/${category_id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+            fetch(request)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    this.styles = data;
+                    resolve(data);
+                }).catch((error) => {
+                    reject(error);
+                });
+
+        });
+        return promise;
+    }
+
+    getFaces = (category_id) => {
+        let promise = new Promise((resolve, reject) => {
+            const request = new Request(`${base_url}/faces/get-by-category/${category_id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+            fetch(request)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    this.faces = data;
+                    console.log("faces loaded:" ,this.faces);
+                    resolve(data);
+                }).catch((error) => {
+                    reject(error);
+                });
+
+        });
+        return promise;
     }
 }
 

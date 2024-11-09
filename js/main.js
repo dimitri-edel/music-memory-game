@@ -52,15 +52,18 @@ class Game {
         this.firstCube = null;
         // Second Cube selected
         this.secondCube = null;
-        this.audio_files_path = "./assets/audio/";
+        // The cover images for the cubes
+        this.faces = [];
         this.playListDescriptions = this.getPlayListDescriptions();
-        this.generateGameCubes();
+        // this.generateGameCubes();
         // Instance of the MP3Player class
         this.audio_player = new MP3Player(this.audio_files_path, this.playListDescriptions);
         // Score
         this.score = 0;
         // Number of cubes uncovered
         this.cubes_uncovered = 0;
+        // Fields for timing the intervals between card picks
+        // The smaller the interval the greater the score
         this.timer = 0;
         this.timerInterval = null;
         this.time_of_last_cube_pick = 0;
@@ -122,12 +125,15 @@ class Game {
         return new Promise((resolve, reject) => {
             // if category has been passed as a parameter in the url
             const category_id = this.getCategory();
-
+            // Load faces fro the API (instance of the ApiController class is instanciated in api-controller.js)
+            let faces_loaded = apiController.getFaces(category_id);
             // Load the playlist from the API (instance of the ApiController class is instanciated in api-controller.js)
             let playlist_loaded = apiController.getPlaylist(category_id);
-            playlist_loaded.then((data) => {
-                this.playListDescriptions = this.createDescriptionsFromApiController();
+            Promise.all([faces_loaded, playlist_loaded]).then((data) => {
+                this.playListDescriptions = this.createDescriptionsFromApiController();               
                 this.cubes = [];
+                // The promise faces_loaded returns an array of face images as the first element of the data array                
+                this.faces = data[0];
                 this.generateGameCubes();
                 this.audio_player = new MP3Player(base_url, this.playListDescriptions);
                 resolve(data);
@@ -160,10 +166,9 @@ class Game {
         }
     }
 
-    generateGameCubes = () => {
-        const path_to_face_images = "./assets/images/card_faces/";
-        var faceImages = this.getCardImages();
-
+    generateGameCubes = () => {        
+        var faceImages = this.faces;
+        console.log("faceimages", this.faces);
 
         // Shuffle the face images array
         this.shuffle(faceImages);
@@ -186,7 +191,7 @@ class Game {
                         composer: this.playListDescriptions[trackIndex].composer,
                         title: this.playListDescriptions[trackIndex].title,
                         composerImage: base_url + this.playListDescriptions[trackIndex].image_filename,
-                        faceImage: path_to_face_images + faceImages[0]
+                        faceImage: base_url + faceImages[0].image
                     }
                 )
             );
@@ -198,7 +203,7 @@ class Game {
                         composer: this.playListDescriptions[trackIndex].composer,
                         title: this.playListDescriptions[trackIndex].title,
                         composerImage: base_url + this.playListDescriptions[trackIndex].image_filename,
-                        faceImage: path_to_face_images + faceImages[0]
+                        faceImage: base_url + faceImages[0].image
                     }
                 )
             );
@@ -437,7 +442,7 @@ class Game {
 class GameView {
     constructor() {
         this.game = null;
-        this.quiz = null;
+        this.quiz = null;        
         this.api_recources_loaded = false;
     }
 
