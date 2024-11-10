@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us</title>
-     <!-- Favicon -->
+    <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
@@ -12,92 +13,145 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/about.css">
     <link rel="stylesheet" href="assets/css/styles.css">
-    
+    <!-- Scripts that require to be loaded first -->
+    <!-- Local storage PlayerData, category, score -->
+    <script src="js/playerData.js"></script>
+    <!-- api-controller.js -->
+    <script src="js/api-controller.js"></script>
+
+    <script>
+        // Get the root element
+        var root_css = document.querySelector(':root');
+
+        // Create a function for setting a variable value
+        function changeCSSVariables() {
+            // loadCategory() function is defined in playerData.js
+            let category_id = loadCategory();
+            let style_loaded = apiController.getStyle(category_id);
+            style_loaded.then((style) => {
+                root_css.style.setProperty('--primary-color', style.primary_color);
+                root_css.style.setProperty('--secondary-color', style.secondary_color);
+                root_css.style.setProperty('--complementary-color', style.complementary_color);
+                root_css.style.setProperty('--body-background-image', `url("${base_url}${style.background_image}")`);
+            });
+        }
+        window.onpaint = changeCSSVariables();
+    </script>
 </head>
+
 <body>
     <div id="navbar-placeholder"></div>
     <div class="container mt-5">
         <div class="intro-text">
             <h2>Welcome to Our Team Page</h2>
-            <p>At the heart of every great project is a great team, and we're excited to introduce you to ours. Each member brings their unique skills, passions, and experiences to the table. From coding to design, and everything in between, we collaborate to create innovative solutions while sharing a love for music that fuels our creativity.</p>
+            <p>At the heart of every great project is a great team, and we're excited to introduce you to ours. Each
+                member brings their unique skills, passions, and experiences to the table. From coding to design, and
+                everything in between, we collaborate to create innovative solutions while sharing a love for music that
+                fuels our creativity.</p>
         </div>
         <div class="grid-container">
             <div class="card mb-4">
                 <img src="assets/images/anthony_radose.jpg" class="card-img-left" alt="Anthony Radose photo">
                 <div class="card-body">
                     <h5 class="card-title">Anthony Radose</h5>
-                    <a href="https://www.linkedin.com/in/anthony-radose-35a969236/" class="card-link" target="_blank"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-                    <a href="https://github.com/anthonyradose" class="card-link" target="_blank"> <i class="fa-brands fa-square-github"></i> GitHub</a>
+                    <a href="https://www.linkedin.com/in/anthony-radose-35a969236/" class="card-link" target="_blank"><i
+                            class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://github.com/anthonyradose" class="card-link" target="_blank"> <i
+                            class="fa-brands fa-square-github"></i> GitHub</a>
                     <p class="card-text"><strong>Role:</strong> Java Script Master</p>
                     <p class="card-text"><strong>Favorite Composer:</strong> Claude Debussy</p>
-                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>“I vibe to instrumental, classical, and electronic music while coding, but let's be real—rock 'n' roll is my true soulmate, and it always steals the show!”</em></p>
+                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>“I vibe to instrumental, classical, and
+                            electronic music while coding, but let's be real—rock 'n' roll is my true soulmate, and it
+                            always steals the show!”</em></p>
                 </div>
             </div>
             <div class="card mb-4">
                 <img src="assets/images/monica_iancu_square.jpg" class="card-img-left" alt="Monica Iancu photo">
                 <div class="card-body">
                     <h5 class="card-title">Monica Iancu</h5>
-                    <a href="https://www.linkedin.com/in/monica-iancu-software-developer/" class="card-link" target="_blank"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-                    <a href="https://github.com/Monicaular" class="card-link" target="_blank"><i class="fa-brands fa-square-github"></i> GitHub</a>
+                    <a href="https://www.linkedin.com/in/monica-iancu-software-developer/" class="card-link"
+                        target="_blank"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://github.com/Monicaular" class="card-link" target="_blank"><i
+                            class="fa-brands fa-square-github"></i> GitHub</a>
                     <p class="card-text"><strong>Role:</strong> Testing Master</p>
                     <p class="card-text"><strong>Favorite Composer:</strong> Ludwig van Beethoven</p>
-                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>"I jam out to music while driving and cleaning the house—because nothing says "I'm a multitasking rockstar" like belting out tunes while battling dust bunnies!"</em></p>
-                    
+                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>"I jam out to music while driving and
+                            cleaning the house—because nothing says "I'm a multitasking rockstar" like belting out tunes
+                            while battling dust bunnies!"</em></p>
+
                 </div>
             </div>
             <div class="card mb-4">
                 <img src="assets/images/julia_karpa.jpg" class="card-img-left" alt="Member 3 photo">
                 <div class="card-body">
                     <h5 class="card-title">Julia Karpa</h5>
-                    <a href="https://www.linkedin.com/in/julia-karpa/" class="card-link" target="_blank"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-                    <a href="https://github.com/Julia-Karpa" class="card-link" target="_blank"> <i class="fa-brands fa-square-github"></i> GitHub</a>
+                    <a href="https://www.linkedin.com/in/julia-karpa/" class="card-link" target="_blank"><i
+                            class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://github.com/Julia-Karpa" class="card-link" target="_blank"> <i
+                            class="fa-brands fa-square-github"></i> GitHub</a>
                     <p class="card-text"><strong>Role:</strong> Documentation Master</p>
                     <p class="card-text"><strong>Favorite Composer:</strong> Pyotr Ilyich Tchaikovsky</p>
-                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>“I'm all about those evening and weekend jams—because who doesn't love turning everyday moments into a music video?”</em> </p>
+                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>“I'm all about those evening and weekend
+                            jams—because who doesn't love turning everyday moments into a music video?”</em> </p>
                 </div>
             </div>
             <div class="card mb-4">
                 <img src="assets/images/teo_alina_square.jpg" class="card-img-left" alt="Member 4 photo">
                 <div class="card-body">
                     <h5 class="card-title">Alina Teodora Brinzac</h5>
-                    <a href="https://www.linkedin.com/in/alina-teodora-brinzac/" class="card-link" target="_blank"> <i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-                    <a href="https://github.com/TeodoraAlina" class="card-link" target="_blank"> <i class="fa-brands fa-square-github"></i> GitHub</a>
+                    <a href="https://www.linkedin.com/in/alina-teodora-brinzac/" class="card-link" target="_blank"> <i
+                            class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://github.com/TeodoraAlina" class="card-link" target="_blank"> <i
+                            class="fa-brands fa-square-github"></i> GitHub</a>
                     <p class="card-text"><strong>Role:</strong> Styling Master</p>
                     <p class="card-text"><strong>Favorite Composer:</strong> Johann Sebastian Bach</p>
-                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>"Whether I'm coding, cleaning, strolling, or whipping up a feast, I've got my music blasting—because every mundane task deserves an epic soundtrack!"</em></p>
+                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>"Whether I'm coding, cleaning, strolling,
+                            or whipping up a feast, I've got my music blasting—because every mundane task deserves an
+                            epic soundtrack!"</em></p>
                 </div>
             </div>
             <div class="card mb-4">
                 <img src="assets/images/dimitri.jpeg" class="card-img-left" alt="Member 4 photo">
                 <div class="card-body">
                     <h5 class="card-title">Dimitri Edel</h5>
-                    <a href="https://www.linkedin.com/in/dimitri-edel-26a5022a9/" class="card-link" target="_blank"> <i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-                    <a href="https://github.com/dimitri-edel" class="card-link" target="_blank"> <i class="fa-brands fa-square-github"></i> GitHub</a>
+                    <a href="https://www.linkedin.com/in/dimitri-edel-26a5022a9/" class="card-link" target="_blank"> <i
+                            class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://github.com/dimitri-edel" class="card-link" target="_blank"> <i
+                            class="fa-brands fa-square-github"></i> GitHub</a>
                     <p class="card-text"><strong>Role:</strong> Java Script Master</p>
                     <p class="card-text"><strong>Favorite Composer:</strong> Hans Zimmer</p>
-                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>"I crank up the tunes while I'm coding, jogging, and cooking—because who doesn't need a soundtrack for their epic battles against bugs, sweat, and dinner?"</em> </p>
+                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>"I crank up the tunes while I'm coding,
+                            jogging, and cooking—because who doesn't need a soundtrack for their epic battles against
+                            bugs, sweat, and dinner?"</em> </p>
                 </div>
             </div>
             <div class="card mb-4">
                 <img src="assets/images/kiko_climent_square.jpg" class="card-img-left" alt="Member 4 photo">
                 <div class="card-body">
                     <h5 class="card-title">Kiko Climent</h5>
-                    <a href="https://www.linkedin.com/in/kiko-climent83/" class="card-link" target="_blank"> <i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-                    <a href="https://github.com/Kiko-Climent" class="card-link" target="_blank"> <i class="fa-brands fa-square-github"></i> GitHub</a>
+                    <a href="https://www.linkedin.com/in/kiko-climent83/" class="card-link" target="_blank"> <i
+                            class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://github.com/Kiko-Climent" class="card-link" target="_blank"> <i
+                            class="fa-brands fa-square-github"></i> GitHub</a>
                     <p class="card-text"><strong>Role:</strong> Java Script Master</p>
                     <p class="card-text"><strong>Favorite Composer:</strong>Erik Satie</p>
-                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>"As a DJ, I basically treat silence like a bad track—so you can bet I always keep the music rolling!"</em> </p>
+                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>"As a DJ, I basically treat silence like
+                            a bad track—so you can bet I always keep the music rolling!"</em> </p>
                 </div>
             </div>
             <div class="card mb-4">
                 <img src="assets/images/jacqueline_kalmar.jpg" class="card-img-left" alt="Member 4 photo">
                 <div class="card-body">
                     <h5 class="card-title">Jacqueline Kalmar</h5>
-                    <a href="https://www.linkedin.com/in/jacqueline-kalmar/" class="card-link" target="_blank"> <i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-                    <a href="https://github.com/JaqiKal" class="card-link" target="_blank"> <i class="fa-brands fa-square-github"></i> GitHub</a>
+                    <a href="https://www.linkedin.com/in/jacqueline-kalmar/" class="card-link" target="_blank"> <i
+                            class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://github.com/JaqiKal" class="card-link" target="_blank"> <i
+                            class="fa-brands fa-square-github"></i> GitHub</a>
                     <p class="card-text"><strong>Role:</strong> Scrum Master</p>
                     <p class="card-text"><strong>Favorite Composer:</strong> Antonio Lucio Vivaldi</p>
-                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>"Nothing beats cruising solo on the motorway with the volume cranked up—it's like my own personal concert, and I'm definitely the star!"</em> </p>
+                    <p class="card-text"><i class="fa-solid fa-music"></i> <em>"Nothing beats cruising solo on the
+                            motorway with the volume cranked up—it's like my own personal concert, and I'm definitely
+                            the star!"</em> </p>
                 </div>
             </div>
         </div>
@@ -107,6 +161,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="js/loadLayout.js"></script>
-    
+
 </body>
+
 </html>
