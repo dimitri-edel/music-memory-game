@@ -13,7 +13,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="assets/css/feedbackform.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <!-- Scripts that require to be loaded first -->
+    <!-- Local storage PlayerData, category, score -->
+    <script src="js/playerData.js"></script>
+    <!-- api-controller.js -->
+    <script src="js/api-controller.js"></script>
 
+    <script>
+        // Get the root element
+        var root_css = document.querySelector(':root');
+
+        // Create a function for setting a variable value
+        function changeCSSVariables() {
+            // loadCategory() function is defined in playerData.js
+            let category_id = loadCategory();
+            let style_loaded = apiController.getStyle(category_id);
+            style_loaded.then((style) => {
+                root_css.style.setProperty('--primary-color', style.primary_color);
+                root_css.style.setProperty('--secondary-color', style.secondary_color);
+                root_css.style.setProperty('--complementary-color', style.complementary_color);
+                root_css.style.setProperty('--body-background-image', `url("${base_url}${style.background_image}")`);
+            });
+        }
+        window.onpaint = changeCSSVariables();
+    </script>
 </head>
 
 <body>
