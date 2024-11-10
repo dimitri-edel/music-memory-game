@@ -89,15 +89,15 @@
 }
 
 .instructions-button, .restart-button {
-  background-color: #f08080; 
+  background-color: var(--complementary-color); 
   border: none;
-  color: white;
+  color: var(--secondary-color);
   padding: 15px 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   justify-content: space-between;
-  font-size: 16px;
+  font-size: 1.5em;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 8px; 

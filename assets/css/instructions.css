@@ -1,10 +1,10 @@
 h1 {
     text-align: center;
-    color: #004D40;
+    color: var(--secondary-color);
     padding-bottom: 10px;
 }
 h2 {
-    color: #004D40;
+    color: var(--secondary-color);
     padding-bottom: 10px;
     padding-top: 10px;
 }
@@ -17,7 +17,7 @@ li {
 }
 
 h3 {
-    color: #004D40;
+    color: var(--secondary-color);
     margin-top: 10px;
 }
 
@@ -61,7 +61,7 @@ h3 > p {
     display: inline-block;
     border: none;
     cursor: pointer;
-    background-color: #004d40;
+    background-color: var(--secondary-color););
     color: white;
     padding: 10px 20px;
     border: none;
